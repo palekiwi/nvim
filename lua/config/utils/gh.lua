@@ -33,7 +33,7 @@ end
 local function get_hash_from_blame(file_name, line_number)
   local output = run_command("git blame -L " .. line_number .. ",+1 -l " .. file_name)
 
-  return string.match(output, "[^ ]+")
+  return string.match(output, "%^?([^ ]+)")
 end
 
 local function get_file_hash(file_name)

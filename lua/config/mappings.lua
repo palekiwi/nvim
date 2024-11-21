@@ -5,7 +5,7 @@ local helpers = require('config.utils.helpers')
 local telescope_utils = require('config.utils.telescope')
 local gh_utils = require('config.utils.gh')
 local git_utils = require('config.utils.git')
-local rails_utils = require('config.utils.rails')
+local rails_utils = require('rails-utils')
 
 vim.g.mapleader = ","
 
@@ -19,21 +19,21 @@ local base = {
   { "<A-.>",      "<cmd>BufferNext<cr>",                                                  desc = "Next Buffer" },
   { "<A-<>",      "<cmd>BufferMovePrevious<cr>",                                          desc = "Move Previous Buffer" },
   { "<A->>",      "<cmd>BufferMoveNext<cr>",                                              desc = "Move Next Buffer" },
+  { "<A-X>",      "<cmd>BufferCloseAllButCurrent<cr>",                                    desc = "Close Buffer All But Current" },
   { "<A-c>",      gh_utils.copy_file_url,                                                 desc = "Copy gh file url" },
   { "<A-d>",      gh_utils.copy_diff_url,                                                 desc = "Copy gh diff url" },
   { "<A-f>",      "<cmd>Telescope live_grep<cr>",                                         desc = "Live Grep" },
   { "<A-g>",      telescope_utils.git_commits,                                            desc = "Find template in views" },
-  { "<A-h>",      "<cmd>BufferFirst<cr>",                                                 desc = "Go to First" },
+  { "<A-h>",      "<cmd>Telescope help_tags<cr>",                                         desc = "Help tags" },
   { "<A-l>",      "<cmd>set cursorline!<cr>",                                             desc = "Toggle Cursorline" },
   { "<A-m>",      "zMzA",                                                                 desc = "Toggle Fold" },
   { "<A-n>",      "<Plug>CapsLockToggle",                                                 desc = "Toggle Capslock",                   mode = "i" },
-  { "<A-q>",      "<cmd>BufferClose<cr>",                                                 desc = "Close Buffer" },
   { "<A-s>",      "<cmd>A<cr>",                                                           desc = "Find Spec" },
   { "<A-t>",      "<Cmd>FloatermToggle first<CR>",                                        desc = "Toggle first terminal" },
   { "<A-t>",      rails_utils.find_template_render,                                       desc = "Find template in views" },
   { "<A-v>",      rails_utils.find_template,                                              desc = "Views" },
   { "<A-w>",      "<cmd>Telescope grep_string word_match=-w<cr>",                         desc = "String Grep" },
-  { "<A-x>",      "<cmd>BufferCloseAllButCurrent<cr>",                                    desc = "Close Buffer All But Current" },
+  { "<A-x>",      "<cmd>BufferClose<cr>",                                                 desc = "Close Buffer All But Current" },
   { "<A-z>",      "za",                                                                   desc = "Toggle Fold" },
   { "<C-b>",      "<cmd>Telescope buffers ignore_current_buffer=true sort_mru=true<cr>",  desc = "Buffers" },
   { "<C-d>",      vim.diagnostic.goto_next,                                               desc = "Diagnostics Next" },
@@ -52,7 +52,6 @@ local base = {
   { "<F6>",       "<C-R>=strftime('%F')<cr>",                                             desc = "Insert date",                       mode = "i" },
   { "<F8>",       "<C-R>=expand('%:t')<cr>",                                              desc = "Insert current filename",           mode = "i" },
   { "<leader>c",  "<cmd>let @+=expand('%')<cr>",                                          desc = "copy current filepath to clipboard" },
-  { "<leader>d",  "<cmd>Gitsigns diffthis<cr>",                                           desc = "Diff this" },
   { "<leader>f",  function() vim.lsp.buf.format { async = true } end,                     desc = "LSP Format" },
   { "<leader>gy", "<cmd>Telescope grep_string search_dirs=webpack/src/styles<cr>",        desc = "Grep Styles" },
   { "<leader>h",  "<cmd>Gitsigns toggle_deleted<cr>",                                     desc = "Deleted" },
@@ -108,7 +107,7 @@ local base = {
   { "tf",         "<cmd>Neotree float git_status<cr>",                                    desc = "Float git status" },
   { "th",         "<cmd>Gitsigns toggle_deleted<cr><cmd>Gitsigns toggle_word_diff<cr>",   desc = "Deleted" },
   { "tm",         function() git_utils.set_base_branch("master") end,                     desc = "Change base: master" },
-  { "tn",         "<cmd>Gitsigns diffthis<cr>",                                           desc = "Diff this" },
+  { "tn",         git_utils.diffthis,                                                     desc = "Diff this" },
   { "tq",         git_utils.hunks_to_loclist,                                             desc = "Hunks to Loclist" },
 }
 
@@ -116,6 +115,9 @@ local noop = {
   { "s", "s", desc = "No Op", mode = "s" }, -- prevent changing mode in snippet expansion
   { "l", "l", desc = "No Op", mode = "s" }, -- prevent changing mode in snippet expansion
 }
+
+vim.keymap.set('n', '<leader>or', rails_utils.find_template_render)
+vim.keymap.set('n', '<leader>ot', rails_utils.find_template)
 
 wk.add(base)
 wk.add(noop)

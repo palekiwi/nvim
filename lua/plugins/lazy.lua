@@ -190,9 +190,6 @@ require("lazy").setup({
     {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
-    {
-      "tpope/vim-rails"
-    },
     { "palekiwi/rails-utils.nvim", dev = true }
   }
 })

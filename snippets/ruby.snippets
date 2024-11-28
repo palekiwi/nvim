@@ -57,7 +57,16 @@ snippet binding.pry
 	binding.pry
 
 snippet rubocop:disable
-    # rubocop:disable $0
+    # rubocop:disable ${0:Metrics/AbcSize}
+
+snippet Metrics/CyclomaticComplexity
+    Metrics/CyclomaticComplexity
+
+snippet Metrics/PerceivedComplexity
+    Metrics/PerceivedComplexity
+
+snippet Metrics/AbcSize
+    Metrics/AbcSize
 
 snippet map_to_h
     map(&:to_h)

@@ -1,11 +1,11 @@
 local wk = require("which-key")
 local kiwi = require('kiwi')
+local keymaps_rails = require("config.keymaps.rails")
 
 local helpers = require('config.utils.helpers')
 local telescope_utils = require('config.utils.telescope')
 local gh_utils = require('config.utils.gh')
 local git_utils = require('config.utils.git')
-local rails_utils = require('rails-utils')
 
 vim.g.mapleader = ","
 
@@ -30,8 +30,6 @@ local base = {
   { "<A-n>",      "<Plug>CapsLockToggle",                                                 desc = "Toggle Capslock",                   mode = "i" },
   { "<A-s>",      "<cmd>Telescope current_buffer_tags show_line=true<cr>",                desc = "Tags" },
   { "<A-t>",      "<Cmd>FloatermToggle first<CR>",                                        desc = "Toggle first terminal" },
-  { "<A-t>",      rails_utils.find_template_render,                                       desc = "Find template in views" },
-  { "<A-v>",      rails_utils.find_template,                                              desc = "Views" },
   { "<A-w>",      "<cmd>Telescope grep_string word_match=-w<cr>",                         desc = "String Grep" },
   { "<A-x>",      "<cmd>BufferClose<cr>",                                                 desc = "Close Buffer All But Current" },
   { "<A-z>",      "za",                                                                   desc = "Toggle Fold" },
@@ -42,7 +40,6 @@ local base = {
   { "<C-h>",      vim.lsp.buf.signature_help,                                             desc = "LSP Signature help" },
   { "<C-p>",      telescope_utils.changed_files,                                          desc = "Search changed files" },
   { "<C-q>",      "<cmd>Telescope quickfix show_line=false<cr>",                          desc = "Quickfix" },
-  { "<C-s>",      rails_utils.alternate,                                                  desc = "Find Spec" },
   { "<C-space>",  vim.lsp.buf.hover,                                                      desc = "LSP Hover" },
   { "<C-t>",      telescope_utils.search_tags,                                            desc = "Find tag" },
   { "<C-u>",      telescope_utils.lsp_references,                                         desc = "Ref" },
@@ -116,10 +113,16 @@ local noop = {
   { "l", "l", desc = "No Op", mode = "s" }, -- prevent changing mode in snippet expansion
 }
 
-vim.keymap.set('n', '<leader>or', rails_utils.find_template_render)
-vim.keymap.set('n', '<leader>ot', rails_utils.find_template)
-
 wk.add(base)
 wk.add(noop)
 
 wk.setup({})
+
+--- mappings only for a rails project
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    if vim.fn.filereadable("bin/rails") == 1 then
+      wk.add(keymaps_rails)
+    end
+  end,
+})

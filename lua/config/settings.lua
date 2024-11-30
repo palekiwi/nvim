@@ -28,6 +28,8 @@ set.number = true
 set.relativenumber = false
 set.cursorline = false
 
+set.laststatus = 3
+
 set.timeout = true
 set.timeoutlen = 300
 

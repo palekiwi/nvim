@@ -46,7 +46,8 @@ vim.notify = require("notify")
 vim.api.nvim_set_option("clipboard", "unnamed")
 
 vim.diagnostic.config({
-  virtual_text = false
+  virtual_text = false,
+  foat = true,
 })
 
 setup_autocmd()

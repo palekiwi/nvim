@@ -21,5 +21,7 @@ return {
   { "<leader>st", function() find_files({ "webpack/src/controllers" }) end,    desc = "Stimulus" },
   { "<leader>sv", function() find_files({ "app/views" }) end,                  desc = "Views" },
   { "<leader>sy", function() find_files({ "webpack/src/styles" }) end,         desc = "Styles" },
+  { "<C-l>",  "<cmd>RSpecLineFail<cr>",                                    desc = "RSpec Line Details" },
+
   -- end group: search
 }

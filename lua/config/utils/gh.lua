@@ -75,4 +75,23 @@ M.copy_diff_url = function()
   vim.notify("Copied diff URL to clipboard.")
 end
 
+M.copy_files_changed_url = function()
+  local pr_number = vim.g.pr_number
+  if not pr_number then
+    return
+  end
+
+  local repo = get_repo()
+  local file_name = get_file_name()
+
+  local line_number = vim.api.nvim_win_get_cursor(0)[1]
+  local file_hash = get_file_hash(file_name)
+
+  local url = "https://github.com/" .. repo .. "/pull/" .. pr_number .. "/files#diff-" .. file_hash .. "R" .. line_number
+
+  vim.fn.setreg("+", url)
+
+  vim.notify("Copied files changed URL to clipboard.")
+end
+
 return M

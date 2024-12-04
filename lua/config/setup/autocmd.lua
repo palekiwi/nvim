@@ -12,8 +12,24 @@ local function set_git_base(name)
   })
 end
 
+--- Sets PR number on startup 
+--- @param name string name of an environmental variable that holds the branch name
+local function set_pr_number(name)
+  create_autocmd("VimEnter", {
+    callback = function()
+      local pr_number = os.getenv(name)
+      if not pr_number then
+        return
+      else
+        vim.g.pr_number = pr_number
+      end
+    end,
+  })
+end
+
 return function()
   set_git_base("GIT_BASE")
+  set_pr_number("PR_NUMBER")
 
   create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = { "*/files/*.yml", "*/k8s/*.yml" },

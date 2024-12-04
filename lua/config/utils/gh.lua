@@ -44,12 +44,12 @@ end
 
 -- builds and copies to system clipboard a URL pointing to
 -- the currently open buffer and line number under cursor on github.com
-M.copy_file_url = function()
+M.copy_file_url = function(opts)
   local repo = get_repo()
   local file_name = get_file_name()
 
   local line_number = vim.api.nvim_win_get_cursor(0)[1]
-  local hash = get_hash()
+  local hash = opts and opts.branch or get_hash()
 
   local url = "https://github.com/" .. repo .. "/blob/" .. hash .. "/" .. file_name .. "#L" .. line_number
 

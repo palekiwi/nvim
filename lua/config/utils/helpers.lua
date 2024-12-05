@@ -9,7 +9,8 @@ M.open_on_line = function()
 
   local str = reg:gsub("https://github.com/.+/blob/[^/]+/", "")
 
-  local path = str:match("(%.?[%a%/%_]+%.[%a%._-]+)")
+  --- TODO examine this regex
+  local path = str:match("(%.?[%a%d%/%_]+%.[%a%._-]+)")
 
   local line_nr = str:match(":(%d+)") or str:match("#L(%d+)") or str:match("#(%d+)")
 

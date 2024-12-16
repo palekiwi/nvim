@@ -4,19 +4,15 @@ local lsp_flags = {
   debounce_text_changes = 150,
 }
 
-local function format()
-  vim.lsp.buf.format { async = true }
-end
-
 local on_attach = function(_, bufnr)
   vim.keymap.set("n", "<C-h>", vim.lsp.buf.signature_help, { buffer = bufnr })
   vim.keymap.set("n", "<C-space>", vim.lsp.buf.hover, { buffer = bufnr })
-  vim.keymap.set("n", "<leader>f", format, { buffer = bufnr, desc = "[LSP] format" })
-  vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { buffer = bufnr, desc = "[LSP] rename" })
+  vim.keymap.set("n", "<leader>f", function() vim.lsp.buf.format { async = true } end,
+    { buffer = bufnr, desc = "[LSP] format" })
+  vim.keymap.set("n", "<leader>dr", vim.lsp.buf.rename, { buffer = bufnr, desc = "[LSP] rename" })
   vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, { buffer = bufnr, desc = "[Diagnostic] next" })
   vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, { buffer = bufnr, desc = "[Diagnostic] prev" })
   vim.keymap.set("n", "<leader>df", vim.diagnostic.open_float, { buffer = bufnr, desc = "[Diagnostic] float" })
-  vim.keymap.set("n", "<leader>dd", "<cmd>RSpecDiagnostics<cr>", { buffer = bufnr, desc = "[Diagnostic] RSpec" })
 end
 
 -- Add additional capabilities supported by nvim-cmp
@@ -95,6 +91,8 @@ lspconfig["nixd"].setup {
 --     capabilities = capabilities,
 --     flags = lsp_flags,
 -- }
+
+lspconfig['ocamllsp'].setup {}
 
 lspconfig["solargraph"].setup {
   on_attach = on_attach,

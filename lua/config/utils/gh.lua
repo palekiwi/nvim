@@ -1,7 +1,7 @@
 M = {}
 
 local function get_file_name()
-  local file_name = vim.fn.expand("%")
+  local file_name = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
   assert(file_name ~= "", "Not a valid file.")
 
   return file_name

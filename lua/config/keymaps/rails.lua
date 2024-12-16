@@ -9,6 +9,11 @@ return {
   { "<A-t>",      rails_utils.find_template_render,                            desc = "Find template in views" },
   { "<A-v>",      rails_utils.find_template,                                   desc = "Views" },
   { "<C-s>",      rails_utils.alternate,                                       desc = "Find Spec" },
+  { "<C-l>",      rails_utils.show_failure_details,                            desc = "[RSpec] Details" },
+  { "<leader>dd", rails_utils.show_diagnostics,                                desc = "[Diagnostic] RSpec" },
+  { "<leader>rp", function() rails_utils.run_tests({ scope = "pr" }) end,      desc = "[RSpec] Test PR" },
+  { "<leader>rs", "<cmd>RSpecLiveTestOnSave<cr>",      desc = "[RSpec] Activate test on save" },
+  { "<leader>rc", "<cmd>RSpecLiveTestOnSaveCancel<cr>",      desc = "[RSpec] Cancel test on save" },
   -- start group: search
   { "<leader>s",  group = "Search" },
   { "<leader>sC", function() find_files({ "app/contracts" }) end,              desc = "Contracts" },
@@ -21,7 +26,4 @@ return {
   { "<leader>st", function() find_files({ "webpack/src/controllers" }) end,    desc = "Stimulus" },
   { "<leader>sv", function() find_files({ "app/views" }) end,                  desc = "Views" },
   { "<leader>sy", function() find_files({ "webpack/src/styles" }) end,         desc = "Styles" },
-  { "<C-l>",  "<cmd>RSpecLineFail<cr>",                                    desc = "RSpec Line Details" },
-
-  -- end group: search
 }

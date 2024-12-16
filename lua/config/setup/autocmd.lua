@@ -40,11 +40,4 @@ return function()
     pattern = { "*" },
     command = "set foldlevel=99",
   })
-
-
-  vim.api.nvim_create_user_command("AutoRun", function()
-    print "AutoRun start now..."
-    local bufnr = vim.fn.input "Bufnr: "
-    print("\nchose:", bufnr)
-  end, {})
 end

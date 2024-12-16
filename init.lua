@@ -42,6 +42,7 @@ require('plugins.nvim-dap-ui')
 require('plugins.yaml-companion')
 require('plugins.nvim-treesitter')
 require('plugins.nvim-treesitter-text-objects')
+require('plugins.rails-utils')
 
 require('config.settings')
 require('config.mappings')

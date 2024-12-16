@@ -1,6 +1,7 @@
 local wk = require("which-key")
 local kiwi = require('kiwi')
 local keymaps_rails = require("config.keymaps.rails")
+local keymaps_telescope = require("config.keymaps.telescope")
 
 local helpers = require('config.utils.helpers')
 local telescope_utils = require('config.utils.telescope')
@@ -57,7 +58,7 @@ local base = {
   { "<leader>w",  "<cmd>write<cr>",                                                       desc = "write" },
   { "<leader>x",  "<cmd>quit<cr>",                                                        desc = "quit" },
   { "<space>a",   vim.lsp.buf.code_action,                                                desc = "LSP Code Action" },
-  { "<space>e",   helpers.open_on_line,                                                   desc = "Open file on line" },
+  { "<space>l",   helpers.open_on_line,                                                   desc = "Open file on line" },
   { "<space>h",   "<cmd>hide<cr>",                                                        desc = "Hide" },
   { "<space>n",   "<cmd>only<cr>",                                                        desc = "Only" },
   { "<space>o",   helpers.toggle_quickfix,                                                desc = "Toggle quickfix" },
@@ -90,7 +91,7 @@ local base = {
   { "tm",         function() git_utils.set_base_branch("master") end,                     desc = "Change base: master" },
   { "tn",         git_utils.diffthis,                                                     desc = "Diff this" },
   { "tq",         git_utils.hunks_to_loclist,                                             desc = "Hunks to Loclist" },
-  { "ts",         "<cmd>nohlsearch<cr>",                                                  desc = "Hunks to Loclist" },
+  { "tl",         "<cmd>nohlsearch<cr>",                                                  desc = "Hunks to Loclist" },
   { "<leader>y",  group = "Copy to clipboard" },
   { "<leader>yc", gh_utils.copy_files_changed_url,                                        desc = "GH files changed" },
   { "<leader>yd", gh_utils.copy_diff_url,                                                 desc = "GH diff" },
@@ -107,6 +108,8 @@ local noop = {
 
 wk.add(base)
 wk.add(noop)
+
+wk.add(keymaps_telescope)
 
 wk.setup({})
 

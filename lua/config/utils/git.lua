@@ -26,7 +26,7 @@ end
 
 M.set_base_branch = function(branch) set_base_branch(branch) end
 
-M.toggle_git_tree = function() toggle_git_tree("show", true) end
+M.toggle_git_tree = function() toggle_git_tree("focus", true) end
 
 M.diffthis = gs.diffthis
 

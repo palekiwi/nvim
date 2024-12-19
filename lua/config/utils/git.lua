@@ -26,9 +26,9 @@ end
 
 M.set_base_branch = function(branch) set_base_branch(branch) end
 
-M.toggle_git_tree = function() toggle_git_tree("focus", true) end
+M.toggle_git_tree = function(action) toggle_git_tree(action, true) end
 
-M.diffthis = gs.diffthis
+M.diffthis = function(vertical) gs.diffthis(nil, { vertical = vertical }) end
 
 M.prev_hunk = function() gs.nav_hunk("prev", { preview = false, wrap = true }) end
 

@@ -20,13 +20,22 @@ local delta = previewers.new_termopen_previewer {
   end
 }
 
+local search_tags_opts = {
+  fname_width = 60,
+  show_line = false,
+  only_sort_tags = true
+}
+
 M.search_tags = function()
-  builtin.tags({
-    fname_width = 60,
-    show_line = false,
-    only_sort_tags = true,
-    default_text = vim.fn.expand("<cword>")
-  })
+  builtin.tags(search_tags_opts)
+end
+
+M.search_tags_cword = function()
+  local opts = vim.tbl_extend('force',
+    search_tags_opts,
+    { default_text = vim.fn.expand("<cword>") }
+  )
+  builtin.tags(opts)
 end
 
 M.lsp_references = function()

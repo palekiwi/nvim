@@ -12,8 +12,8 @@ return {
   { "<C-l>",      rails_utils.show_failure_details,                            desc = "[RSpec] Details" },
   { "<leader>dd", rails_utils.show_diagnostics,                                desc = "[Diagnostic] RSpec" },
   { "<leader>rp", function() rails_utils.run_tests({ scope = "pr" }) end,      desc = "[RSpec] Test PR" },
-  { "<leader>rs", "<cmd>RSpecLiveTestOnSave<cr>",      desc = "[RSpec] Activate test on save" },
-  { "<leader>rc", "<cmd>RSpecLiveTestOnSaveCancel<cr>",      desc = "[RSpec] Cancel test on save" },
+  { "<leader>rs", "<cmd>RSpecLiveTestOnSave<cr>",                              desc = "[RSpec] Activate test on save" },
+  { "<leader>rc", "<cmd>RSpecLiveTestOnSaveCancel<cr>",                        desc = "[RSpec] Cancel test on save" },
   -- start group: search
   { "<leader>s",  group = "Search" },
   { "<leader>sC", function() find_files({ "app/contracts" }) end,              desc = "Contracts" },

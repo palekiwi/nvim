@@ -36,4 +36,15 @@ M.next_hunk = function() gs.nav_hunk("next", { preview = false, wrap = true }) e
 
 M.hunks_to_loclist = function() gs.setqflist("attached", { use_location_list = true, open = true }) end
 
+M.changed_files_to_loclist = function()
+  local base_branch = vim.g.git_base or "master"
+  local command = "git diff --name-only $(git merge-base HEAD " .. base_branch .. " )"
+
+  local list = vim.fn.systemlist(command)
+
+  vim.fn.setloclist(0, {}, 'r', { efm = '%f', lines = list })
+
+  vim.notify("Loclist set to changed files")
+end
+
 return M

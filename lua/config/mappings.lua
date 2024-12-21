@@ -95,7 +95,8 @@ local base = {
   { "tf",         "<cmd>Neotree float git_status<cr>",                                    desc = "Float git status" },
   { "th",         "<cmd>Gitsigns toggle_deleted<cr><cmd>Gitsigns toggle_word_diff<cr>",   desc = "Deleted" },
   { "tm",         function() git_utils.set_base_branch("master") end,                     desc = "Change base: master" },
-  { "tn",         function() git_utils.diffthis(false) end,                               desc = "Diff this" },
+  { "tn",         function() git_utils.diffthis(false) end,                               desc = "Diff this: horizontal" },
+  { "tN",         function() git_utils.diffthis(true) end,                                desc = "Diff this: vertical" },
   { "tq",         git_utils.hunks_to_loclist,                                             desc = "Hunks to Loclist" },
   { "tl",         "<cmd>nohlsearch<cr>",                                                  desc = "Hunks to Loclist" },
   { "<leader>y",  group = "Copy to clipboard" },
@@ -106,6 +107,10 @@ local base = {
   { "<leader>yp", function() gh_utils.copy_file_url({ branch = vim.fn.getreg("+") }) end, desc = "GH file: clipboard" },
   { "<leader>yb", function() gh_utils.copy_file_url({ branch = vim.g.git_base }) end,     desc = "GH file: base" },
 }
+
+vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, { desc = "[Diagnostic] next" })
+vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, { desc = "[Diagnostic] prev" })
+vim.keymap.set("n", "<leader>df", vim.diagnostic.open_float, { desc = "[Diagnostic] float" })
 
 local noop = {
   { "s", "s", desc = "No Op", mode = "s" }, -- prevent changing mode in snippet expansion

@@ -10,9 +10,6 @@ local on_attach = function(_, bufnr)
   vim.keymap.set("n", "<leader>f", function() vim.lsp.buf.format { async = true } end,
     { buffer = bufnr, desc = "[LSP] format" })
   vim.keymap.set("n", "<leader>dr", vim.lsp.buf.rename, { buffer = bufnr, desc = "[LSP] rename" })
-  vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, { buffer = bufnr, desc = "[Diagnostic] next" })
-  vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, { buffer = bufnr, desc = "[Diagnostic] prev" })
-  vim.keymap.set("n", "<leader>df", vim.diagnostic.open_float, { buffer = bufnr, desc = "[Diagnostic] float" })
 end
 
 -- Add additional capabilities supported by nvim-cmp

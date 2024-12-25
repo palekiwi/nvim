@@ -3,6 +3,7 @@ local fmt = require("luasnip.extras.fmt").fmt
 local s = ls.snippet
 local t = ls.text_node
 local c = ls.choice_node
+local i = ls.insert_node
 local extras = require("luasnip.extras")
 local r = extras.rep
 

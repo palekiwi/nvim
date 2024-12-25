@@ -1,0 +1,3 @@
+return {
+  { "barklan/capslock.nvim", },
+}

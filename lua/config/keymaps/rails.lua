@@ -6,9 +6,9 @@ local function find_files(dirs)
 end
 
 return {
-  { "<A-t>",      rails_utils.find_template_render,                            desc = "Find template in views" },
-  { "<A-v>",      rails_utils.find_template,                                   desc = "Views" },
-  { "<C-s>",      rails_utils.alternate,                                       desc = "Find Spec" },
+  { "<leader>gr",  rails_utils.find_template_render,                            desc = "[Rails] Where is current view renedered?" },
+  { "<leader>gt",  rails_utils.find_template,                                   desc = "[Rails] Find this template" },
+  { "<C-s>",      rails_utils.alternate,                                       desc = "[Rails] Find Spec" },
   { "<C-l>",      rails_utils.show_failure_details,                            desc = "[RSpec] Details" },
   { "<leader>dd", rails_utils.show_diagnostics,                                desc = "[Diagnostic] RSpec" },
   { "<leader>rp", function() rails_utils.run_tests({ scope = "pr" }) end,      desc = "[RSpec] Test PR" },

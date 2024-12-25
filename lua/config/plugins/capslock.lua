@@ -1,3 +1,8 @@
 return {
-  { "barklan/capslock.nvim", },
+  {
+    "barklan/capslock.nvim",
+    config = function()
+      require("capslock").setup()
+    end
+  },
 }

@@ -47,20 +47,30 @@ M.lsp_references = function()
   })
 end
 
+local last_commit = function()
+  local last_commit = vim.fn.system({
+    "git",
+    "merge-base",
+    "HEAD",
+    vim.g.git_base or "master"
+  })
+
+  assert(vim.v.shell_error == 0)
+
+  return last_commit
+end
+
 -- search in files that have changed since a particular commit (base branch)
 M.changed_files = function(opts)
-  local base_branch = vim.g.git_base or "master"
-  local command = "git diff --name-only $(git merge-base HEAD " .. base_branch .. " )"
+  local success, commit = pcall(last_commit)
 
-  local handle = assert(io.popen(command))
-  local result = handle:read("*a")
-  handle:close()
-
-  local files = {}
-
-  for token in string.gmatch(result, "[^%s]+") do
-    table.insert(files, token)
+  if not success then
+    return vim.api.nvim_echo({
+      { "Changed files: Fatal. Are there any commits yet?", "ErrorMsg" },
+    }, true, {})
   end
+
+  local files = vim.fn.systemlist({ "git", "diff", "--name-only", commit })
 
   opts = opts or {}
 

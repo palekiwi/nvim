@@ -55,22 +55,23 @@ local last_commit = function()
     vim.g.git_base or "master"
   })
 
-  assert(vim.v.shell_error == 0)
+  vim.print(last_commit)
+  assert(vim.v.shell_error == 0, last_commit)
 
   return last_commit
 end
 
 -- search in files that have changed since a particular commit (base branch)
 M.changed_files = function(opts)
-  local success, commit = pcall(last_commit)
+  local success, result = pcall(last_commit)
 
   if not success then
     return vim.api.nvim_echo({
-      { "Changed files: Fatal. Are there any commits yet?", "ErrorMsg" },
+      { "Changed files: " .. result, "ErrorMsg" },
     }, true, {})
   end
 
-  local files = vim.fn.systemlist({ "git", "diff", "--name-only", commit })
+  local files = vim.fn.systemlist({ "git", "diff", "--name-only", result })
 
   opts = opts or {}
 

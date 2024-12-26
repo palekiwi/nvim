@@ -71,7 +71,7 @@ M.changed_files = function(opts)
     }, true, {})
   end
 
-  local files = vim.fn.systemlist({ "git", "diff", "--name-only", result })
+  local files = vim.fn.systemlist("git diff --name-only " .. result)
 
   opts = opts or {}
 

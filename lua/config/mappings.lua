@@ -8,10 +8,10 @@ local telescope_utils = require('config.utils.telescope')
 local gh_utils = require('config.utils.gh')
 local git_utils = require('config.utils.git')
 
-vim.g.mapleader = ","
+local set = vim.keymap.set
 
-vim.keymap.set({ 'n', 'v' }, '<Down>', 'gj')
-vim.keymap.set({ 'n', 'v' }, '<Up>', 'gk')
+set({ 'n', 'v' }, '<Down>', 'gj')
+set({ 'n', 'v' }, '<Up>', 'gk')
 
 vim.api.nvim_set_keymap('v', '<C-C>', '"+y', { noremap = true, silent = true })
 
@@ -62,7 +62,6 @@ local base = {
   { "<leader>t",  "<cmd>Neotree toggle position=left<cr>",                                desc = "tree toggle" },
   { "<leader>v",  function() kiwi.open_wiki_index() end,                                  desc = "Open wiki index" },
   { "<leader>w",  "<cmd>write<cr>",                                                       desc = "write" },
-  { "<leader>x",  "<cmd>quit<cr>",                                                        desc = "quit" },
   { "<space>a",   vim.lsp.buf.code_action,                                                desc = "LSP Code Action" },
   { "<space>l",   helpers.open_on_line,                                                   desc = "Open file on line" },
   { "<space>h",   "<cmd>hide<cr>",                                                        desc = "Hide" },
@@ -108,9 +107,12 @@ local base = {
   { "<leader>yb", function() gh_utils.copy_file_url({ branch = vim.g.git_base }) end,     desc = "GH file: base" },
 }
 
-vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, { desc = "[Diagnostic] next" })
-vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, { desc = "[Diagnostic] prev" })
-vim.keymap.set("n", "<leader>df", vim.diagnostic.open_float, { desc = "[Diagnostic] float" })
+set("n", "<leader>dn", vim.diagnostic.goto_next, { desc = "[Diagnostic] next" })
+set("n", "<leader>dp", vim.diagnostic.goto_prev, { desc = "[Diagnostic] prev" })
+set("n", "<leader>df", vim.diagnostic.open_float, { desc = "[Diagnostic] float" })
+
+set("n", "<leader>x", "<cmd>.lua<CR>", { desc = "Execute the current line" })
+set("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
 
 local noop = {
   { "s", "s", desc = "No Op", mode = "s" }, -- prevent changing mode in snippet expansion

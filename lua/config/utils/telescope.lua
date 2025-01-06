@@ -117,7 +117,7 @@ local gen_from_git_commits = function(opts)
     local author = string.sub(rest, 1, 21)
     local msg = string.gsub(string.sub(rest, 22), "^%s+", "")
 
-    local date
+    local date ---@type string
     if date_ == os.date("%Y-%m-%d") then
       date = time
     else
@@ -157,7 +157,7 @@ M.git_commits = function(opts)
       actions.select_default:replace(function()
         actions.close(prompt_bufnr)
         local selection = action_state.get_selected_entry()
-        local git_base = selection.value
+        local git_base = selection.value ---@type string
 
         git_utils.set_base_branch(git_base)
       end)

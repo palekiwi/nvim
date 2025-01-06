@@ -10,8 +10,15 @@ local on_attach = function(_, bufnr)
   vim.keymap.set("n", "<leader>dr", vim.lsp.buf.rename, { buffer = bufnr, desc = "[LSP] rename" })
 end
 
+local function ruby_lsp_server()
+  local cwd = vim.fn.getcwd()
 
-local ruby_lsp = "solargraph"
+  if  cwd == '/var/home/pl/code/ygt/wss-data' then
+    return 'sorbet'
+  else
+    return 'solargraph'
+  end
+end
 
 return {
   {
@@ -92,11 +99,40 @@ return {
 
       lspconfig['ocamllsp'].setup {}
 
-      lspconfig[ruby_lsp].setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        flags = lsp_flags,
-      }
+      local lsp_server = ruby_lsp_server()
+
+      if lsp_server == "sorbet" then
+        lspconfig["sorbet"].setup {
+          on_attach = on_attach,
+          capabilities = capabilities,
+          flags = lsp_flags,
+        }
+      elseif lsp_server == "solargraph" then
+        print "Setting up solargraph"
+
+        lspconfig["solargraph"].setup {
+          settings = {
+            useBundler = false
+          },
+          on_attach = on_attach,
+          capabilities = capabilities,
+          flags = lsp_flags,
+        }
+      elseif lsp_server == "ruby-lsp" then
+        vim.fn.system('go-task -a | grep "* ruby-lsp:"')
+
+        if vim.v.shell_error == 0 then
+          print "Setting up ruby-lsp via Docker"
+          lspconfig["ruby_lsp"].setup {
+            cmd = { "go-task", "ruby-lsp" },
+            on_attach = on_attach,
+            capabilities = capabilities,
+            flags = lsp_flags,
+          }
+        else
+          error "ruby-lsp not available"
+        end
+      end
 
       lspconfig["stimulus_ls"].setup {}
 

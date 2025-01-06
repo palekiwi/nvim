@@ -41,9 +41,7 @@ set.foldlevel = 1
 set.foldmethod = "indent"
 set.foldexpr = "nvim_treesitter#foldexpr()"
 
-vim.notify = require("notify")
-
-vim.api.nvim_set_option("clipboard", "unnamed")
+vim.api.nvim_set_option_value("clipboard", "unnamed", {})
 
 vim.diagnostic.config({
   virtual_text = false,

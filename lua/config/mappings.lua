@@ -37,7 +37,6 @@ local base = {
   { "<A-l>",      "<cmd>set cursorline!<cr>",                                             desc = "Toggle Cursorline" },
   { "<A-m>",      "zMzA",                                                                 desc = "Toggle Fold" },
   { "<A-n>",      "<Plug>CapsLockToggle",                                                 desc = "Toggle Capslock",                   mode = "i" },
-  { "<A-t>",      "<Cmd>FloatermToggle first<CR>",                                        desc = "Toggle first terminal" },
   { "<A-x>",      "<cmd>BufferClose<cr>",                                                 desc = "Close Buffer All But Current" },
   { "<A-z>",      "za",                                                                   desc = "Toggle Fold" },
   { "<C-b>",      "<cmd>Telescope buffers ignore_current_buffer=true sort_mru=true<cr>",  desc = "Buffers" },
@@ -125,12 +124,3 @@ wk.add(noop)
 wk.add(keymaps_telescope)
 
 wk.setup({})
-
---- mappings only for a rails project
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    if vim.fn.filereadable("bin/rails") == 1 then
-      wk.add(keymaps_rails)
-    end
-  end,
-})

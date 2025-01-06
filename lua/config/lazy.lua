@@ -38,7 +38,8 @@ local opt = {
   },
   spec = {
     { import = "config.plugins" },
-  }
+  },
+  checker = { enabled = true },
 }
 
 require("lazy").setup(opt)

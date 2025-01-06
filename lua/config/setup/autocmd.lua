@@ -27,6 +27,7 @@ local function set_pr_number(name)
   })
 end
 
+
 return function()
   set_git_base("GIT_BASE")
   set_pr_number("PR_NUMBER")
@@ -40,4 +41,15 @@ return function()
     pattern = { "*" },
     command = "set foldlevel=99",
   })
+
+  create_autocmd("VimEnter", {
+    callback = function()
+      --- if launched in a rails project directory
+      if vim.fn.filereadable("bin/rails") == 1 then
+        --- mappings only for a rails project
+        require("config.keymaps.rails")
+      end
+    end,
+  })
+
 end

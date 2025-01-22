@@ -1,6 +1,6 @@
 local wk = require("which-key")
 local kiwi = require('kiwi')
-local keymaps_rails = require("config.keymaps.rails")
+require("config.keymaps.rails")
 local keymaps_telescope = require("config.keymaps.telescope")
 
 local helpers = require('config.utils.helpers')
@@ -37,6 +37,7 @@ local base = {
   { "<A-l>",      "<cmd>set cursorline!<cr>",                                             desc = "Toggle Cursorline" },
   { "<A-m>",      "zMzA",                                                                 desc = "Toggle Fold" },
   { "<A-n>",      "<Plug>CapsLockToggle",                                                 desc = "Toggle Capslock",                   mode = "i" },
+  { "<A-w>",      telescope_utils.search_cword,                                           desc = "Live Grep" },
   { "<A-x>",      "<cmd>BufferClose<cr>",                                                 desc = "Close Buffer All But Current" },
   { "<A-z>",      "za",                                                                   desc = "Toggle Fold" },
   { "<C-b>",      "<cmd>Telescope buffers ignore_current_buffer=true sort_mru=true<cr>",  desc = "Buffers" },
@@ -59,6 +60,7 @@ local base = {
   { "<leader>N",  function() git_utils.toggle_git_tree("show") end,                       desc = "Tree: Git status" },
   { "<leader>q",  "<cmd>quit<cr>",                                                        desc = "quit" },
   { "<leader>t",  "<cmd>Neotree toggle position=left<cr>",                                desc = "tree toggle" },
+  { "<leader>b",  "<cmd>Neotree toggle show buffers left<cr>",                           desc = "tree toggle" },
   { "<leader>v",  function() kiwi.open_wiki_index() end,                                  desc = "Open wiki index" },
   { "<leader>w",  "<cmd>write<cr>",                                                       desc = "write" },
   { "<space>a",   vim.lsp.buf.code_action,                                                desc = "LSP Code Action" },

@@ -7,7 +7,10 @@ local function find_files(dirs)
   builtin.find_files({ search_dirs = dirs })
 end
 
+set("n", "<A-r>", rails_utils.find_template_render, { desc = "[Rails] Where is current view renedered?" })
+set("n", "<A-t>", rails_utils.find_template, { desc = "[Rails] Find this template" })
 set("n", "<leader>gr", rails_utils.find_template_render, { desc = "[Rails] Where is current view renedered?" })
+set("n", "<leader>gR", function() rails_utils.find_template_render({cword = true}) end, { desc = "[Rails] Where is cword template renedered?" })
 set("n", "<leader>gt", rails_utils.find_template, { desc = "[Rails] Find this template" })
 set("n", "<C-s>", rails_utils.alternate, { desc = "[Rails] Find Spec" })
 set("n", "<C-l>", rails_utils.show_failure_details, { desc = "[RSpec] Details" })

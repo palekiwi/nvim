@@ -26,6 +26,13 @@ local search_tags_opts = {
   only_sort_tags = true
 }
 
+M.search_cword = function()
+  builtin.grep_string {
+    default_text = vim.fn.expand("<cfile>"),
+    word_match = "-w"
+  }
+end
+
 M.search_tags = function()
   builtin.tags(search_tags_opts)
 end

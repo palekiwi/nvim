@@ -11,13 +11,7 @@ local on_attach = function(_, bufnr)
 end
 
 local function ruby_lsp_server()
-  local cwd = vim.fn.getcwd()
-
-  if  cwd == '/var/home/pl/code/ygt/wss-data' then
-    return 'sorbet'
-  else
-    return 'solargraph'
-  end
+  return os.getenv("RUBY_LSP")
 end
 
 return {
@@ -108,29 +102,30 @@ return {
           flags = lsp_flags,
         }
       elseif lsp_server == "solargraph" then
-        print "Setting up solargraph"
-
         lspconfig["solargraph"].setup {
-          settings = {
-            useBundler = false
-          },
+          --- settings = {
+          ---   useBundler = false
+          --- },
           on_attach = on_attach,
           capabilities = capabilities,
           flags = lsp_flags,
         }
       elseif lsp_server == "ruby-lsp" then
-        vim.fn.system('go-task -a | grep "* ruby-lsp:"')
-
-        if vim.v.shell_error == 0 then
-          print "Setting up ruby-lsp via Docker"
+        -- lspconfig["ruby_lsp"].setup {
+        --   cmd = { "ruby-lsp" },
+        --   on_attach = on_attach,
+        --   capabilities = capabilities,
+        --   flags = lsp_flags,
+        -- }
+        local cmd = os.getenv("RUBY_LSP_CMD")
+        print(cmd)
+        if cmd then
           lspconfig["ruby_lsp"].setup {
-            cmd = { "go-task", "ruby-lsp" },
+            cmd = vim.split(cmd, " "),
             on_attach = on_attach,
             capabilities = capabilities,
             flags = lsp_flags,
           }
-        else
-          error "ruby-lsp not available"
         end
       end
 

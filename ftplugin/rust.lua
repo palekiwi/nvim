@@ -19,7 +19,7 @@ vim.keymap.set(
   { silent = true, buffer = bufnr }
 )
 
-vim.keymap.set("n", "<leader>f", function() vim.lsp.buf.format { async = true } end,
+vim.keymap.set("n", "<leader>ff", function() vim.lsp.buf.format { async = true } end,
   { buffer = bufnr, desc = "[LSP] format" })
 vim.keymap.set("n", "<leader>dr", vim.lsp.buf.rename, { buffer = bufnr, desc = "[LSP] rename" })
 vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, { buffer = bufnr, desc = "[Diagnostic] next" })

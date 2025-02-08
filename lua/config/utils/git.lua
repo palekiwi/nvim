@@ -30,9 +30,13 @@ M.toggle_git_tree = function(action) toggle_git_tree(action, true) end
 
 M.diffthis = function(vertical) gs.diffthis(nil, { vertical = vertical }) end
 
-M.prev_hunk = function() gs.nav_hunk("prev", { preview = false, wrap = true }) end
+M.prev_hunk = function()
+  gs.nav_hunk("prev", { preview = false, wrap = true })
+end
 
-M.next_hunk = function() gs.nav_hunk("next", { preview = false, wrap = true }) end
+M.next_hunk = function()
+  gs.nav_hunk("next", { preview = false, wrap = true })
+end
 
 M.hunks_to_loclist = function() gs.setqflist("attached", { use_location_list = true, open = true }) end
 

@@ -5,7 +5,7 @@ local lsp_flags = {
 local on_attach = function(_, bufnr)
   vim.keymap.set("n", "<C-h>", vim.lsp.buf.signature_help, { buffer = bufnr })
   vim.keymap.set("n", "<C-space>", vim.lsp.buf.hover, { buffer = bufnr })
-  vim.keymap.set("n", "<leader>f", function() vim.lsp.buf.format { async = true } end,
+  vim.keymap.set("n", "<leader>ff", function() vim.lsp.buf.format { async = true } end,
     { buffer = bufnr, desc = "[LSP] format" })
   vim.keymap.set("n", "<leader>dr", vim.lsp.buf.rename, { buffer = bufnr, desc = "[LSP] rename" })
 end

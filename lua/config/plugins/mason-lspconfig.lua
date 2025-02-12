@@ -10,7 +10,6 @@ return {
           "elmls",
           "eslint",
           "gopls",
-          "lua_ls",
           "pyright",
           "tailwindcss",
           "volar",

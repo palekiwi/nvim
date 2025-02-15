@@ -54,23 +54,22 @@ M.lsp_references = function()
   })
 end
 
-local last_commit = function()
-  local last_commit = vim.fn.system({
+local last_commit_on_base = function()
+  local last_commit_on_base = vim.fn.system({
     "git",
     "merge-base",
     "HEAD",
     vim.g.git_base or "master"
   })
 
-  vim.print(last_commit)
-  assert(vim.v.shell_error == 0, last_commit)
+  assert(vim.v.shell_error == 0, last_commit_on_base)
 
-  return last_commit
+  return last_commit_on_base
 end
 
 -- search in files that have changed since a particular commit (base branch)
 M.changed_files = function(opts)
-  local success, result = pcall(last_commit)
+  local success, result = pcall(last_commit_on_base)
 
   if not success then
     return vim.api.nvim_echo({
@@ -79,6 +78,40 @@ M.changed_files = function(opts)
   end
 
   local files = vim.fn.systemlist("git diff --name-only " .. result)
+
+  opts = opts or {}
+
+  pickers.new(opts, {
+    prompt_title = "changed files",
+    finder = finders.new_table {
+      results = files,
+      entry_maker = make_entry.gen_from_file(opts)
+    },
+    previewer = delta,
+    sorter = conf.generic_sorter(opts),
+  }):find()
+end
+
+M.changed_files_since = function(opts)
+  local success, result = pcall(last_commit_on_base)
+
+  if not success then
+    return vim.api.nvim_echo({
+      { "Changed files: " .. result, "ErrorMsg" },
+    }, true, {})
+  end
+
+  local base = vim.g.git_base or "master"
+  local commits = vim.fn.systemlist("git rev-list --ancestry-path " .. base .. "..HEAD --no-merges")
+
+  local files = {};
+
+  for _, commit in ipairs(commits) do
+    local changed_in_commit = vim.fn.systemlist("git diff-tree --no-commit-id --name-only -r " .. commit)
+    files = vim.fn.extend(files, changed_in_commit)
+  end
+
+  ---local files = vim.fn.systemlist("git diff --name-only " .. result)
 
   opts = opts or {}
 

@@ -13,6 +13,8 @@ return {
       { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' }
     },
     config = function()
+      local actions = require("telescope.actions")
+
       require("telescope").setup {
         extensions = {
           ["ui-select"] = {
@@ -21,6 +23,12 @@ return {
           }
         },
         defaults = {
+          mappings = {
+            i = {
+              ["<C-s>"] = actions.cycle_previewers_next,
+              ["<C-a>"] = actions.cycle_previewers_prev,
+            }
+          },
           sorting_strategy = "ascending",
           layout_strategy = "vertical",
           layout_config = {
@@ -29,7 +37,7 @@ return {
               mirror = true,
               prompt_position = "top",
               preview_cutoff = 0,
-              preview_height = 0.75,
+              preview_height = 0.6,
               width = 0.8
             }
           }

@@ -36,7 +36,7 @@ local base = {
   { "<space>t",   git_utils.changed_files_to_loclist,                                     desc = "Change to loclist" },
   { "<A-l>",      "<cmd>set cursorline!<cr>",                                             desc = "Toggle Cursorline" },
   { "<A-m>",      "zMzA",                                                                 desc = "Toggle Fold" },
-  { "<A-n>",      "<Plug>CapsLockToggle",                                                 desc = "Toggle Capslock",                   mode = "i" },
+  { "<A-u>",      "<Plug>CapsLockToggle",                                                 desc = "Toggle Capslock",                   mode = "i" },
   { "<A-w>",      telescope_utils.search_cword,                                           desc = "Live Grep" },
   { "<A-x>",      "<cmd>BufferClose<cr>",                                                 desc = "Close Buffer All But Current" },
   { "<A-z>",      "za",                                                                   desc = "Toggle Fold" },

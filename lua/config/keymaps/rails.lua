@@ -9,15 +9,17 @@ end
 
 set("n", "<A-r>", rails_utils.find_template_render, { desc = "[Rails] Where is current view renedered?" })
 set("n", "<A-t>", rails_utils.find_template, { desc = "[Rails] Find this template" })
-set("n", "<leader>gr", rails_utils.find_template_render, { desc = "[Rails] Where is current view renedered?" })
-set("n", "<leader>gR", function() rails_utils.find_template_render({cword = true}) end, { desc = "[Rails] Where is cword template renedered?" })
+
 set("n", "<leader>gt", rails_utils.find_template, { desc = "[Rails] Find this template" })
 set("n", "<C-s>", rails_utils.alternate, { desc = "[Rails] Find Spec" })
 set("n", "<C-l>", rails_utils.show_failure_details, { desc = "[RSpec] Details" })
 set("n", "<leader>dd", rails_utils.show_diagnostics, { desc = "[Diagnostic] RSpec" })
+
 set("n", "<leader>rp", function() rails_utils.run_tests({ scope = "pr" }) end, { desc = "[RSpec] Test PR" })
+set("n", "<leader>rt", function() rails_utils.run_tests({ scope = "file" }) end, { desc = "[RSpec] Test file" })
 set("n", "<leader>rs", "<cmd>RSpecLiveTestOnSave<cr>", { desc = "[RSpec] Activate test on save" })
 set("n", "<leader>rc", "<cmd>RSpecLiveTestOnSaveCancel<cr>", { desc = "[RSpec] Cancel test on save" })
+
 set("n", "<leader>sC", function() find_files({ "app/contracts" }) end, { desc = "Contracts" })
 set("n", "<leader>sS", function() find_files({ "app/services" }) end, { desc = "Services" })
 set("n", "<leader>sc", function() find_files({ "app/controllers" }) end, { desc = "Controllers" })

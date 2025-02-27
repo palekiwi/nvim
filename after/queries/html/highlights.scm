@@ -13,13 +13,15 @@
     (#match? @stimulus-attribute "data-.*-value"))
 
 ((attribute_name) @stimulus-attribute
-    (#match? @stimulus-attribute "data-.*-target"))
+    (#match? @stimulus-attribute "data-.*-target")
+    (#not-match? @stimulus-attribute "data-ga4-.*-target"))
 
 ((attribute_name) @stimulus-attribute
     (#match? @stimulus-attribute "data-.*-class"))
 
 ((attribute_name) @stimulus-attribute
     (#match? @stimulus-attribute "data-.*-param"))
+
 
 ; ((attribute (attribute_name) @constant
 ;     ((#match? @constant "data-controller")

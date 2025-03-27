@@ -1,5 +1,6 @@
 M = {}
 
+---@return string
 local function get_file_name()
   local file_name = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
   assert(file_name ~= "", "Not a valid file.")
@@ -7,6 +8,8 @@ local function get_file_name()
   return file_name
 end
 
+---@param command string
+---@return string
 local function run_command(command)
   local handle = assert(io.popen(command))
   local result = handle:read("*a")
@@ -30,12 +33,17 @@ local function get_hash()
   return run_command("git log -n 1 --pretty=format:'%H'")
 end
 
+---@param file_name string
+---@param line_number number
+---@return string
 local function get_hash_from_blame(file_name, line_number)
   local output = run_command("git blame -L " .. line_number .. ",+1 -l " .. file_name)
 
   return string.match(output, "%^?([^ ]+)")
 end
 
+---@param file_name string
+---@return string | nil
 local function get_file_hash(file_name)
   local file_hash_out = run_command("echo -n " .. file_name .. " | sha256sum")
 
@@ -66,6 +74,7 @@ M.copy_diff_url = function()
 
   local line_number = vim.api.nvim_win_get_cursor(0)[1]
   local hash = get_hash_from_blame(file_name, line_number)
+  vim.notify(hash)
   local file_hash = get_file_hash(file_name)
 
   local url = "https://github.com/" .. repo .. "/commit/" .. hash .. "/#diff-" .. file_hash .. "R" .. line_number
@@ -73,6 +82,17 @@ M.copy_diff_url = function()
   vim.fn.setreg("+", url)
 
   vim.notify("Copied diff URL to clipboard.")
+end
+
+M.copy_blame_hash_short = function()
+  local file_name = get_file_name()
+
+  local line_number = vim.api.nvim_win_get_cursor(0)[1]
+  local hash = get_hash_from_blame(file_name, line_number):sub(1,7)
+
+  vim.fn.setreg("+", hash)
+
+  vim.notify("Copied commit hash to clipboard: " .. hash)
 end
 
 M.copy_files_changed_url = function()

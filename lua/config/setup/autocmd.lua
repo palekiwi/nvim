@@ -7,7 +7,7 @@ local function set_git_base(name)
     callback = function()
       local base_branch = name and os.getenv(name) or "master"
       vim.g.git_base = base_branch
-      --- require("gitsigns").change_base(base_branch, true)
+      require("gitsigns").change_base(base_branch, true)
     end,
   })
 end

@@ -31,6 +31,8 @@ set("n", "<leader>rda", "<cmd>RspecRunnerTermAll<cr>", { desc = "[RSpec] Termina
 set("n", "<leader>rdp", "<cmd>RspecRunnerTermBase<cr>", { desc = "[RSpec] Terminal Base" })
 set("n", "<leader>rdt", "<cmd>RspecRunnerTermFile<cr>", { desc = "[RSpec] Terminal File" })
 set("n", "<leader>rdn", "<cmd>RspecRunnerTermNearest<cr>", { desc = "[RSpec] Terminal Nearest" })
+set("n", "<leader>rdf", "<cmd>RspecRunnerTermFailures<cr>", { desc = "[RSpec] Terminal Failures" })
+set("n", "<leader>rdl", "<cmd>RspecRunnerTermLast<cr>", { desc = "[RSpec] Terminal Last" })
 set("n", "<C-l>", "<cmd>RspecRunnerShowResults<cr>", { desc = "[RSpec] Results" })
 
 set("n", "<leader>sC", function() find_files({ "app/contracts" }) end, { desc = "Contracts" })

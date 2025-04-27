@@ -131,6 +131,37 @@ return {
 
       lspconfig["stimulus_ls"].setup {}
 
+      --[[
+      lspconfig["tailwindcss"].setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        flags = lsp_flags,
+        settings = {
+          {
+            tailwindCSS = {
+              experimental = {
+                configFile = "app/assets/tailwind/application.css"
+              },
+              classAttributes = { "class" },
+              includeLanguages = {
+                eruby = "erb",
+              },
+              lint = {
+                cssConflict = "warning",
+                invalidApply = "error",
+                invalidConfigPath = "error",
+                invalidScreen = "error",
+                invalidTailwindDirective = "error",
+                invalidVariant = "error",
+                recommendedVariantOrder = "warning"
+              },
+              validate = true
+            }
+          }
+        },
+      }
+      --]]
+
       lspconfig["ts_ls"].setup {
         on_attach = on_attach,
         capabilities = capabilities,

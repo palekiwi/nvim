@@ -11,7 +11,6 @@ return {
           "eslint",
           "gopls",
           "pyright",
-          "tailwindcss",
           "volar",
           "yamlls",
         },

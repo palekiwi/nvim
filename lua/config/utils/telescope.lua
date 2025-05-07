@@ -193,13 +193,20 @@ M.git_commits = function(opts)
   end
 
   opts = {
-    attach_mappings = function(prompt_bufnr, _)
+    attach_mappings = function(prompt_bufnr, map)
       actions.select_default:replace(function()
         actions.close(prompt_bufnr)
         local selection = action_state.get_selected_entry()
         local git_base = selection.value ---@type string
 
         git_utils.set_base_branch(git_base)
+      end)
+
+      map('i', '<C-y>', function()
+        local hash = action_state.get_selected_entry().value ---@type string
+        vim.fn.setreg('+', hash)
+
+        actions.close(prompt_bufnr)
       end)
       return true
     end

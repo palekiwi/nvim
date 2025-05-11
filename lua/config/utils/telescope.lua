@@ -126,6 +126,29 @@ M.changed_files_since = function(opts)
   }):find()
 end
 
+M.diffview_since = function(opts)
+  local success, result = pcall(last_commit_on_base)
+
+  if not success then
+    return vim.api.nvim_echo({
+      { "Changed files: " .. result, "ErrorMsg" },
+    }, true, {})
+  end
+
+  local base = vim.g.git_base or "master"
+  local commits = vim.fn.systemlist("git rev-list --ancestry-path " .. base .. "..HEAD --no-merges")
+
+  local files = {};
+
+  for _, commit in ipairs(commits) do
+    local changed_in_commit = vim.fn.systemlist("git diff-tree --no-commit-id --name-only -r " .. commit)
+    files = vim.fn.extend(files, changed_in_commit)
+  end
+
+  local cmd = "DiffviewOpen " .. base .. " -- " .. vim.fn.join(files, " ")
+  vim.cmd(cmd)
+end
+
 local gen_from_git_commits = function(opts)
   opts = opts or {}
 

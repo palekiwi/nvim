@@ -30,6 +30,11 @@ M.toggle_git_tree = function(action) toggle_git_tree(action, true) end
 
 M.diffthis = function(vertical) gs.diffthis(nil, { vertical = vertical }) end
 
+M.diffview_this = function(vertical)
+  local base = vim.g.git_base or "master"
+  vim.cmd("DiffviewOpen " .. base)
+end
+
 M.prev_hunk = function()
   gs.nav_hunk("prev", { preview = false, wrap = true })
 end

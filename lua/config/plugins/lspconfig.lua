@@ -93,43 +93,52 @@ return {
 
       lspconfig['ocamllsp'].setup {}
 
-      local lsp_server = ruby_lsp_server()
+      -- local lsp_server = ruby_lsp_server()
+      --
+      -- if lsp_server == "sorbet" then
+      --   lspconfig["sorbet"].setup {
+      --     on_attach = on_attach,
+      --     capabilities = capabilities,
+      --     flags = lsp_flags,
+      --   }
+      -- elseif lsp_server == "solargraph" then
+      --   lspconfig["solargraph"].setup {
+      --     --- settings = {
+      --     ---   useBundler = false
+      --     --- },
+      --     on_attach = on_attach,
+      --     capabilities = capabilities,
+      --     flags = lsp_flags,
+      --   }
+      -- elseif lsp_server == "ruby-lsp" then
+      --   -- lspconfig["ruby_lsp"].setup {
+      --   --   cmd = { "ruby-lsp" },
+      --   --   on_attach = on_attach,
+      --   --   capabilities = capabilities,
+      --   --   flags = lsp_flags,
+      --   -- }
+      --   local cmd = os.getenv("RUBY_LSP_CMD")
+      --   print(cmd)
+      --   if cmd then
+      --     lspconfig["ruby_lsp"].setup {
+      --       offset_encoding = "utf-8",
+      --       cmd = vim.split(cmd, " "),
+      --       on_attach = on_attach,
+      --       capabilities = capabilities,
+      --       flags = lsp_flags,
+      --     }
+      --   end
+      -- end
 
-      if lsp_server == "sorbet" then
-        lspconfig["sorbet"].setup {
-          on_attach = on_attach,
-          capabilities = capabilities,
-          flags = lsp_flags,
-        }
-      elseif lsp_server == "solargraph" then
-        lspconfig["solargraph"].setup {
-          --- settings = {
-          ---   useBundler = false
-          --- },
-          on_attach = on_attach,
-          capabilities = capabilities,
-          flags = lsp_flags,
-        }
-      elseif lsp_server == "ruby-lsp" then
-        -- lspconfig["ruby_lsp"].setup {
-        --   cmd = { "ruby-lsp" },
-        --   on_attach = on_attach,
-        --   capabilities = capabilities,
-        --   flags = lsp_flags,
-        -- }
-        local cmd = os.getenv("RUBY_LSP_CMD")
-        print(cmd)
-        if cmd then
-          lspconfig["ruby_lsp"].setup {
-            cmd = vim.split(cmd, " "),
-            on_attach = on_attach,
-            capabilities = capabilities,
-            flags = lsp_flags,
-          }
-        end
-      end
+      lspconfig["ruby_lsp"].setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        flags = lsp_flags,
+      }
 
-      lspconfig["stimulus_ls"].setup {}
+      lspconfig["stimulus_ls"].setup {
+        offset_encoding = "utf-8",
+      }
 
       --[[
       lspconfig["tailwindcss"].setup {

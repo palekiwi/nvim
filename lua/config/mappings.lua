@@ -16,6 +16,10 @@ set({ 'n', 'v' }, '<Up>', 'gk')
 
 vim.api.nvim_set_keymap('v', '<C-C>', '"+y', { noremap = true, silent = true })
 
+-- Set the default step size to 5
+vim.keymap.set('n', '<C-w>m', '40<C-w>>', { noremap = true })
+vim.keymap.set('n', '<C-w>M', '40<C-w><', { noremap = true })
+
 local base = {
   { "<A-,>",      "<cmd>BufferPrevious<cr>",                                              desc = "Previous Buffer" },
   { "<A-.>",      "<cmd>BufferNext<cr>",                                                  desc = "Next Buffer" },

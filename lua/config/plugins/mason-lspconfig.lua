@@ -4,14 +4,14 @@ return {
     config = function()
       require("mason-lspconfig").setup {
         ensure_installed = {
-          "ansiblels",
-          "astro",
+          -- "ansiblels",
+          -- "astro",
           "clangd",
           "elmls",
           "eslint",
-          "gopls",
-          "pyright",
-          "volar",
+          -- "gopls",
+          -- "pyright",
+          --"volar",
           "yamlls",
         },
         automatic_installation = false,

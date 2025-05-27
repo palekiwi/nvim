@@ -126,7 +126,7 @@ M.changed_files_since = function(opts)
   }):find()
 end
 
-M.diffview_since = function(opts)
+M.diffview_since = function()
   local success, result = pcall(last_commit_on_base)
 
   if not success then

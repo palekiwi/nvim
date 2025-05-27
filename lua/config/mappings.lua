@@ -50,7 +50,7 @@ local base = {
   { "<C-f>",      "<cmd>Telescope find_files<cr>",                                        desc = "Find File" },
   { "<C-p>",      telescope_utils.changed_files,                                          desc = "Search changed files" },
   { "<A-p>",      telescope_utils.changed_files_since,                                    desc = "Search changed files" },
-  { "<A-d>",      function() telescope_utils.diffview_since() end,                        desc = "Search changed files" },
+  { "<A-d>",      telescope_utils.diffview_since,                                       desc = "Search changed files" },
   { "<C-q>",      "<cmd>Telescope quickfix show_line=false<cr>",                          desc = "Quickfix" },
   { "<C-t>",      telescope_utils.search_tags_cword,                                      desc = "Find tag" },
   { "<C-u>",      telescope_utils.lsp_references,                                         desc = "Ref" },

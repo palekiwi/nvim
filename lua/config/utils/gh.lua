@@ -84,6 +84,17 @@ M.copy_diff_url = function()
   vim.notify("Copied diff URL to clipboard.")
 end
 
+---@param hash string
+M.copy_commit_url = function(hash)
+  local repo = get_repo()
+
+  local url = "https://github.com/" .. repo .. "/commit/" .. hash
+
+  vim.fn.setreg("+", url)
+
+  vim.notify("Copied commit URL to clipboard.")
+end
+
 M.copy_blame_hash_short = function()
   local file_name = get_file_name()
 

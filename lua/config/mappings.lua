@@ -102,6 +102,7 @@ local base = {
   { "th",         "<cmd>Gitsigns preview_hunk_inline<cr>",                                desc = "Deleted" },
   { "tm",         function() git_utils.set_base_branch("master") end,                     desc = "Change base: master" },
   { "tn",         function() git_utils.diffthis(true) end,                                desc = "Diff this: vertical" },
+  { "tN",         "<cmd>DiffviewOpen<cr>",                                                desc = "DiffviewOpen" },
   { "tq",         git_utils.hunks_to_loclist,                                             desc = "Hunks to Loclist" },
   { "tl",         "<cmd>nohlsearch<cr>",                                                  desc = "Hunks to Loclist" },
   { "ti",         git_utils.diffview_this,                                                desc = "Diff this: horizontal" },
@@ -114,6 +115,9 @@ local base = {
   { "<leader>yh", gh_utils.copy_blame_hash_short,                                         desc = "GH file: short hash" },
   { "<leader>ym", function() gh_utils.copy_file_url({ branch = "master" }) end,           desc = "GH file: master" },
   { "<leader>yp", function() gh_utils.copy_file_url({ branch = vim.fn.getreg("+") }) end, desc = "GH file: clipboard" },
+  { "<leader>li", "<cmd>LspInfo<cr>",                                                     desc = "LSP: Info" },
+  { "<leader>ll", "<cmd>LspLog<cr>",                                                      desc = "LSP: Log" },
+  { "<leader>lr", "<cmd>LspRestart<cr>",                                                  desc = "LSP: Restart" },
 }
 
 set("n", "<leader>dn", vim.diagnostic.goto_next, { desc = "[Diagnostic] next" })

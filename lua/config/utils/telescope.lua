@@ -7,6 +7,7 @@ local previewers = require "telescope.previewers"
 local make_entry = require "telescope.make_entry"
 local entry_display = require "telescope.pickers.entry_display"
 local builtin = require 'telescope.builtin'
+local utils = require('telescope.previewers.utils')
 
 local git_utils = require('config.utils.git')
 local gh_utils = require('config.utils.gh')
@@ -262,6 +263,78 @@ M.git_commits = function(opts)
     end
   }
 
+  local changed_files_previewer = previewers.new_buffer_previewer({
+    title = "Changed Files",
+    define_preview = function(self, entry, _status)
+      local commit_hash = entry.value:match("^(%w+)") ---@type string
+
+      -- Get just the file names
+      local changed_files = vim.fn.system(string.format(
+        "git show --name-status --format='' %s",
+        commit_hash
+      ))
+
+      local lines = {}
+      for filename in changed_files:gmatch("[^\n]+") do
+        if filename ~= "" then
+          table.insert(lines, filename)
+        end
+      end
+
+      vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+
+      -- Add syntax highlighting for git status
+      vim.api.nvim_buf_call(self.state.bufnr, function()
+        vim.cmd("syntax clear")
+        vim.cmd("syntax match GitAdded /^A\\s.*$/")
+        vim.cmd("syntax match GitDeleted /^D\\s.*$/")
+        vim.cmd("syntax match GitRenamed /^R[0-9]*\\s.*$/")
+        vim.cmd("syntax match GitCopied /^C[0-9]*\\s.*$/")
+
+        vim.cmd("highlight GitAdded ctermfg=Green guifg=#6e9440")
+        vim.cmd("highlight GitDeleted ctermfg=Red guifg=#cc6666")
+        vim.cmd("highlight GitRenamed ctermfg=Blue guifg=#85678f")
+        vim.cmd("highlight GitCopied ctermfg=Cyan guifg=#de935f")
+      end)
+    end,
+  })
+
+local custom_diff_previewer = previewers.new_buffer_previewer({
+  title = "Git Diff",
+  define_preview = function(self, entry, _status)
+    local commit_hash = entry.value:match("^(%w+)") ---@type string
+
+    local diff_output = vim.fn.system(string.format(
+      "git --no-pager show --color=never --unified=0 --format= %s",
+      commit_hash
+    ))
+
+    local lines = {}
+    local current_file = nil
+    local first_file = true
+
+    for line in diff_output:gmatch("[^\n]+") do
+      if line:match("^diff %-%-git ") then
+        -- Add spacing before each file (except the first one)
+        if not first_file then
+          table.insert(lines, "")
+        end
+        first_file = false
+
+        -- Extract filename from diff --git a/file b/file
+        current_file = line:match(" b/(.+)$")
+        table.insert(lines, current_file)
+
+      -- Skip index, ---, +++ lines, keep everything else
+      elseif not line:match("^index ") and not line:match("^%-%-%- ") and not line:match("^%+%+%+ ") then
+        table.insert(lines, line)
+      end
+    end
+
+    vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+    utils.highlighter(self.state.bufnr, "diff")
+  end,
+})
   pickers.new(opts, {
     prompt_title = "PR Commits",
     finder = finders.new_table {
@@ -269,10 +342,9 @@ M.git_commits = function(opts)
       entry_maker = gen_from_git_commits(opts)
     },
     previewer = {
-      previewers.git_commit_diff_to_parent.new(opts),
-      previewers.git_commit_diff_to_head.new(opts),
-      previewers.git_commit_diff_as_was.new(opts),
-      previewers.git_commit_message.new(opts),
+      -- previewers.git_commit_diff_to_parent.new(opts),
+      custom_diff_previewer,
+      changed_files_previewer,
     },
     sorter = conf.generic_sorter(opts),
   }):find()

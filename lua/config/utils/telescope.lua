@@ -9,6 +9,7 @@ local entry_display = require "telescope.pickers.entry_display"
 local builtin = require 'telescope.builtin'
 
 local git_utils = require('config.utils.git')
+local gh_utils = require('config.utils.gh')
 
 M = {}
 
@@ -90,6 +91,24 @@ M.changed_files = function(opts)
     previewer = delta,
     sorter = conf.generic_sorter(opts),
   }):find()
+end
+
+-- live grep in change files
+M.grep_changed_files = function(opts)
+  local success, result = pcall(last_commit_on_base)
+
+  if not success then
+    return vim.api.nvim_echo({
+      { "Changed files: " .. result, "ErrorMsg" },
+    }, true, {})
+  end
+
+  local files = vim.fn.systemlist("git diff --name-only " .. result)
+
+  builtin.live_grep {
+    prompt_title = "Grep in Changed Files",
+    search_dirs = files
+  }
 end
 
 M.changed_files_since = function(opts)
@@ -231,6 +250,14 @@ M.git_commits = function(opts)
 
         actions.close(prompt_bufnr)
       end)
+
+      map('i', '<C-g>', function()
+        local hash = action_state.get_selected_entry().value ---@type string
+        gh_utils.copy_commit_url(hash)
+
+        actions.close(prompt_bufnr)
+      end)
+
       return true
     end
   }

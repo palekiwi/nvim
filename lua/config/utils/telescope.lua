@@ -569,7 +569,7 @@ M.git_commits = function(opts)
     previewer = {
       -- previewers.git_commit_diff_to_parent.new(opts),
       custom_diff_previewer,
-      changed_files_previewer,
+      -- changed_files_previewer,
       changed_files_tree_previewer,
     },
     sorter = conf.generic_sorter(opts),

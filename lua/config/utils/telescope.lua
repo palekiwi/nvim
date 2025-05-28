@@ -375,6 +375,28 @@ M.git_commits = function(opts)
         commit_hash
       ))
 
+      -- Define custom highlight group for renames
+      vim.api.nvim_set_hl(0, 'GitFileRenamed', { fg = '#de935f', bold = true }) -- Orange/bold
+
+      local function get_status_highlight(status)
+        local highlights = {
+          A = "GitSignsAdd",       -- Added (green)
+          M = "GitSignsChange",    -- Modified (blue/yellow)
+          D = "GitSignsDelete",    -- Deleted (red)
+          ["R+"] = "GitFileRenamed", -- Renamed to (orange)
+          ["R-"] = "GitFileRenamed", -- Renamed from (orange)
+          T = "GitSignsChange",    -- Type changed (blue/yellow)
+          U = "ErrorMsg",          -- Unmerged (red/error)
+        }
+
+        -- Handle rename statuses like "R063"
+        if status:match("^R") then
+          return "GitFileRenamed"
+        end
+
+        return highlights[status] or "Normal"
+      end
+
       local function create_tree_structure(file_data)
         local tree = {}
 
@@ -388,7 +410,7 @@ M.git_commits = function(opts)
             local current = tree
             for i, part in ipairs(old_parts) do
               if i == #old_parts then
-                current[part .. " [R-]"] = {}
+                current[part .. " [R-]"] = { status = "R-" }
               else
                 if not current[part] then
                   current[part] = {}
@@ -401,7 +423,7 @@ M.git_commits = function(opts)
             current = tree
             for i, part in ipairs(new_parts) do
               if i == #new_parts then
-                current[part .. " [R+]"] = {}
+                current[part .. " [R+]"] = { status = "R+" }
               else
                 if not current[part] then
                   current[part] = {}
@@ -417,7 +439,7 @@ M.git_commits = function(opts)
             for i, part in ipairs(parts) do
               if i == #parts then
                 -- Last part (filename) - store with status
-                current[part .. " [" .. data.status .. "]"] = {}
+                current[part .. " [" .. data.status .. "]"] = { status = data.status }
               else
                 -- Directory part
                 if not current[part] then
@@ -432,23 +454,62 @@ M.git_commits = function(opts)
         return tree
       end
 
-      local function format_tree(tree, prefix, is_last, lines)
+      local function format_tree(tree, prefix, is_last, lines, highlights)
         lines = lines or {}
+        highlights = highlights or {}
         local keys = vim.tbl_keys(tree)
         table.sort(keys)
 
         for i, key in ipairs(keys) do
           local is_last_item = (i == #keys)
           local connector = is_last_item and "└── " or "├── "
-          table.insert(lines, prefix .. connector .. key)
+          local line_content = prefix .. connector .. key
+          local line_number = #lines + 1
 
-          if next(tree[key]) then
+          table.insert(lines, line_content)
+
+          -- Check if this is a file with status (has status field)
+          if tree[key].status then
+            local status = tree[key].status
+            local highlight_group = get_status_highlight(status)
+
+            -- Find the status bracket position
+            local bracket_start = line_content:find("%[")
+            if bracket_start then
+              -- Highlight the entire line with the status color
+              table.insert(highlights, {
+                line = line_number,
+                col_start = 0,
+                col_end = #line_content,
+                hl_group = highlight_group
+              })
+
+              -- Add extra highlighting for the status bracket
+              table.insert(highlights, {
+                line = line_number,
+                col_start = bracket_start - 1,
+                col_end = #line_content,
+                hl_group = highlight_group
+              })
+            end
+          else
+            -- Directory - highlight with Directory color
+            local dir_start = #(prefix .. connector)
+            table.insert(highlights, {
+              line = line_number,
+              col_start = dir_start,
+              col_end = #line_content,
+              hl_group = "Directory"
+            })
+          end
+
+          if next(tree[key]) and not tree[key].status then
             local new_prefix = prefix .. (is_last_item and "    " or "│   ")
-            format_tree(tree[key], new_prefix, is_last_item, lines)
+            format_tree(tree[key], new_prefix, is_last_item, lines, highlights)
           end
         end
 
-        return lines
+        return lines, highlights
       end
 
       -- Parse the git output to extract status and file paths
@@ -477,9 +538,25 @@ M.git_commits = function(opts)
       end
 
       local tree = create_tree_structure(file_data)
-      local formatted_lines = format_tree(tree, "")
+      local formatted_lines, highlights = format_tree(tree, "")
 
+      -- Set the content
       vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, formatted_lines)
+
+      -- Apply syntax highlighting
+      vim.api.nvim_buf_set_option(self.state.bufnr, 'filetype', 'git')
+
+      -- Apply custom highlights
+      for _, hl in ipairs(highlights) do
+        vim.api.nvim_buf_add_highlight(
+          self.state.bufnr,
+          -1,        -- namespace
+          hl.hl_group,
+          hl.line - 1, -- 0-indexed
+          hl.col_start,
+          hl.col_end
+        )
+      end
     end
   })
 

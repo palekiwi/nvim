@@ -335,22 +335,97 @@ M.git_commits = function(opts)
 
       -- Get just the file names
       local changed_files = vim.fn.system(string.format(
-        "git show --name-only --format='' %s",
+        "git show --name-status --format='' %s",
         commit_hash
       ))
 
-      local function create_tree_structure(file_paths)
+      local lines = {}
+      for filename in changed_files:gmatch("[^\n]+") do
+        if filename ~= "" then
+          table.insert(lines, filename)
+        end
+      end
+
+      vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+
+      -- Add syntax highlighting for git status
+      vim.api.nvim_buf_call(self.state.bufnr, function()
+        vim.cmd("syntax clear")
+        vim.cmd("syntax match GitAdded /^A\\s.*$/")
+        vim.cmd("syntax match GitDeleted /^D\\s.*$/")
+        vim.cmd("syntax match GitRenamed /^R[0-9]*\\s.*$/")
+        vim.cmd("syntax match GitCopied /^C[0-9]*\\s.*$/")
+
+        vim.cmd("highlight GitAdded ctermfg=Green guifg=#6e9440")
+        vim.cmd("highlight GitDeleted ctermfg=Red guifg=#cc6666")
+        vim.cmd("highlight GitRenamed ctermfg=Blue guifg=#85678f")
+        vim.cmd("highlight GitCopied ctermfg=Cyan guifg=#de935f")
+      end)
+    end,
+  })
+
+  local changed_files_tree_previewer = previewers.new_buffer_previewer({
+    title = "Changed Files",
+    define_preview = function(self, entry, _status)
+      local commit_hash = entry.value:match("^(%w+)") ---@type string
+
+      -- Get file names with status
+      local changed_files = vim.fn.system(string.format(
+        "git show --name-status --format='' %s",
+        commit_hash
+      ))
+
+      local function create_tree_structure(file_data)
         local tree = {}
 
-        for _, path in ipairs(file_paths) do
-          local parts = vim.split(path, '/')
-          local current = tree
+        for _, data in ipairs(file_data) do
+          if data.status:match("^R") and data.old_path and data.new_path then
+            -- Handle renamed files - show both old and new paths
+            local old_parts = vim.split(data.old_path, '/')
+            local new_parts = vim.split(data.new_path, '/')
 
-          for i, part in ipairs(parts) do
-            if not current[part] then
-              current[part] = {}
+            -- Add old path (marked as deleted)
+            local current = tree
+            for i, part in ipairs(old_parts) do
+              if i == #old_parts then
+                current[part .. " [R-]"] = {}
+              else
+                if not current[part] then
+                  current[part] = {}
+                end
+                current = current[part]
+              end
             end
-            current = current[part]
+
+            -- Add new path (marked as added)
+            current = tree
+            for i, part in ipairs(new_parts) do
+              if i == #new_parts then
+                current[part .. " [R+]"] = {}
+              else
+                if not current[part] then
+                  current[part] = {}
+                end
+                current = current[part]
+              end
+            end
+          else
+            -- Handle normal files
+            local parts = vim.split(data.path, '/')
+            local current = tree
+
+            for i, part in ipairs(parts) do
+              if i == #parts then
+                -- Last part (filename) - store with status
+                current[part .. " [" .. data.status .. "]"] = {}
+              else
+                -- Directory part
+                if not current[part] then
+                  current[part] = {}
+                end
+                current = current[part]
+              end
+            end
           end
         end
 
@@ -376,33 +451,36 @@ M.git_commits = function(opts)
         return lines
       end
 
-
-      local lines = {}
-      for filename in changed_files:gmatch("[^\n]+") do
-        if filename ~= "" then
-          table.insert(lines, filename)
+      -- Parse the git output to extract status and file paths
+      local file_data = {}
+      for line in changed_files:gmatch("[^\n]+") do
+        if line ~= "" then
+          local status = line:match("^(%w+)")
+          if status:match("^R") then
+            -- Handle renamed files: "R100    old/path.txt    new/path.txt"
+            local old_path, new_path = line:match("^R%d*%s+(.-)%s+(.+)$")
+            if old_path and new_path then
+              table.insert(file_data, {
+                status = status,
+                old_path = old_path,
+                new_path = new_path
+              })
+            end
+          else
+            -- Handle normal files: "M    path/to/file.txt"
+            local filepath = line:match("^%w+%s+(.+)$")
+            if filepath then
+              table.insert(file_data, { status = status, path = filepath })
+            end
+          end
         end
       end
 
-      local tree = create_tree_structure(lines)
+      local tree = create_tree_structure(file_data)
       local formatted_lines = format_tree(tree, "")
 
       vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, formatted_lines)
-
-      -- Add syntax highlighting for git status
-      vim.api.nvim_buf_call(self.state.bufnr, function()
-        vim.cmd("syntax clear")
-        vim.cmd("syntax match GitAdded /^A\\s.*$/")
-        vim.cmd("syntax match GitDeleted /^D\\s.*$/")
-        vim.cmd("syntax match GitRenamed /^R[0-9]*\\s.*$/")
-        vim.cmd("syntax match GitCopied /^C[0-9]*\\s.*$/")
-
-        vim.cmd("highlight GitAdded ctermfg=Green guifg=#6e9440")
-        vim.cmd("highlight GitDeleted ctermfg=Red guifg=#cc6666")
-        vim.cmd("highlight GitRenamed ctermfg=Blue guifg=#85678f")
-        vim.cmd("highlight GitCopied ctermfg=Cyan guifg=#de935f")
-      end)
-    end,
+    end
   })
 
   pickers.new(opts, {
@@ -415,6 +493,7 @@ M.git_commits = function(opts)
       -- previewers.git_commit_diff_to_parent.new(opts),
       custom_diff_previewer,
       changed_files_previewer,
+      changed_files_tree_previewer,
     },
     sorter = conf.generic_sorter(opts),
   }):find()

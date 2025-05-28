@@ -335,9 +335,47 @@ M.git_commits = function(opts)
 
       -- Get just the file names
       local changed_files = vim.fn.system(string.format(
-        "git show --name-status --format='' %s",
+        "git show --name-only --format='' %s",
         commit_hash
       ))
+
+      local function create_tree_structure(file_paths)
+        local tree = {}
+
+        for _, path in ipairs(file_paths) do
+          local parts = vim.split(path, '/')
+          local current = tree
+
+          for i, part in ipairs(parts) do
+            if not current[part] then
+              current[part] = {}
+            end
+            current = current[part]
+          end
+        end
+
+        return tree
+      end
+
+      local function format_tree(tree, prefix, is_last, lines)
+        lines = lines or {}
+        local keys = vim.tbl_keys(tree)
+        table.sort(keys)
+
+        for i, key in ipairs(keys) do
+          local is_last_item = (i == #keys)
+          local connector = is_last_item and "└── " or "├── "
+          table.insert(lines, prefix .. connector .. key)
+
+          if next(tree[key]) then
+            local new_prefix = prefix .. (is_last_item and "    " or "│   ")
+            format_tree(tree[key], new_prefix, is_last_item, lines)
+          end
+        end
+
+        return lines
+      end
+
 
       local lines = {}
       for filename in changed_files:gmatch("[^\n]+") do
@@ -346,7 +384,10 @@ M.git_commits = function(opts)
         end
       end
 
-      vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+      local tree = create_tree_structure(lines)
+      local formatted_lines = format_tree(tree, "")
+
+      vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, formatted_lines)
 
       -- Add syntax highlighting for git status
       vim.api.nvim_buf_call(self.state.bufnr, function()

@@ -140,7 +140,13 @@ M.changed_files = function(opts)
 
   local files = vim.fn.systemlist("git diff --name-only " .. result)
 
-  opts = opts or {}
+  opts = {
+    attach_mappings = function(_prompt_bufnr, map)
+      map('i', '<C-l>', actions.smart_send_to_loclist + actions.open_loclist)
+
+      return true
+    end
+  }
 
   pickers.new(opts, {
     prompt_title = "changed files",

@@ -22,6 +22,65 @@ local delta = previewers.new_termopen_previewer {
   end
 }
 
+local custom_file_diff_previewer = previewers.new_buffer_previewer({
+  title = "File Diff",
+  define_preview = function(self, entry, _status)
+    local base_branch = vim.g.git_base or "master"
+
+    local diff_output = vim.fn.system(
+      "git --no-pager diff --color=never --unified=3 " .. base_branch .. '..HEAD ' .. entry.value
+    )
+
+    local lines = {}
+
+    for line in diff_output:gmatch("[^\n]+") do
+      if not line:match("^index ") and not line:match("^diff %-%-git ") and not line:match("^%-%-%- ") and not line:match("^%+%+%+ ") then
+        table.insert(lines, line)
+      end
+    end
+
+    vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+    utils.highlighter(self.state.bufnr, "diff")
+  end,
+})
+
+local custom_diff_previewer = previewers.new_buffer_previewer({
+  title = "Git Diff",
+  define_preview = function(self, entry, _status)
+    local commit_hash = entry.value:match("^(%w+)") ---@type string
+
+    local diff_output = vim.fn.system(string.format(
+      "git --no-pager show --color=never --unified=0 --format= %s",
+      commit_hash
+    ))
+
+    local lines = {}
+    local current_file = nil
+    local first_file = true
+
+    for line in diff_output:gmatch("[^\n]+") do
+      if line:match("^diff %-%-git ") then
+        -- Add spacing before each file (except the first one)
+        if not first_file then
+          table.insert(lines, "")
+        end
+        first_file = false
+
+        -- Extract filename from diff --git a/file b/file
+        current_file = line:match(" b/(.+)$")
+        table.insert(lines, current_file)
+
+        -- Skip index, ---, +++ lines, keep everything else
+      elseif not line:match("^index ") and not line:match("^%-%-%- ") and not line:match("^%+%+%+ ") then
+        table.insert(lines, line)
+      end
+    end
+
+    vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+    utils.highlighter(self.state.bufnr, "diff")
+  end,
+})
+
 local search_tags_opts = {
   fname_width = 60,
   show_line = false,
@@ -89,7 +148,7 @@ M.changed_files = function(opts)
       results = files,
       entry_maker = make_entry.gen_from_file(opts)
     },
-    previewer = delta,
+    previewer = custom_file_diff_previewer,
     sorter = conf.generic_sorter(opts),
   }):find()
 end
@@ -141,7 +200,7 @@ M.changed_files_since = function(opts)
       results = files,
       entry_maker = make_entry.gen_from_file(opts)
     },
-    previewer = delta,
+    previewer = custom_file_diff_previewer,
     sorter = conf.generic_sorter(opts),
   }):find()
 end
@@ -299,42 +358,6 @@ M.git_commits = function(opts)
     end,
   })
 
-local custom_diff_previewer = previewers.new_buffer_previewer({
-  title = "Git Diff",
-  define_preview = function(self, entry, _status)
-    local commit_hash = entry.value:match("^(%w+)") ---@type string
-
-    local diff_output = vim.fn.system(string.format(
-      "git --no-pager show --color=never --unified=0 --format= %s",
-      commit_hash
-    ))
-
-    local lines = {}
-    local current_file = nil
-    local first_file = true
-
-    for line in diff_output:gmatch("[^\n]+") do
-      if line:match("^diff %-%-git ") then
-        -- Add spacing before each file (except the first one)
-        if not first_file then
-          table.insert(lines, "")
-        end
-        first_file = false
-
-        -- Extract filename from diff --git a/file b/file
-        current_file = line:match(" b/(.+)$")
-        table.insert(lines, current_file)
-
-      -- Skip index, ---, +++ lines, keep everything else
-      elseif not line:match("^index ") and not line:match("^%-%-%- ") and not line:match("^%+%+%+ ") then
-        table.insert(lines, line)
-      end
-    end
-
-    vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
-    utils.highlighter(self.state.bufnr, "diff")
-  end,
-})
   pickers.new(opts, {
     prompt_title = "PR Commits",
     finder = finders.new_table {

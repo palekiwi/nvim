@@ -303,11 +303,33 @@ M.git_commits = function(opts)
   opts = {
     attach_mappings = function(prompt_bufnr, map)
       actions.select_default:replace(function()
-        actions.close(prompt_bufnr)
-        local selection = action_state.get_selected_entry()
-        local git_base = selection.value ---@type string
+        local picker = action_state.get_current_picker(prompt_bufnr)
+        local selection = picker:get_multi_selection() ---@type table?
 
-        git_utils.set_base_branch(git_base)
+        if selection == nil or vim.tbl_isempty(selection) then
+          local hash = action_state.get_selected_entry().value ---@type string
+
+          actions.close(prompt_bufnr)
+
+          vim.cmd(string.format("DiffviewOpen %s^..%s", hash, hash))
+          return
+        end
+
+        local size = #selection
+        local first ---@type string
+        local last ---@type string
+
+        if size == 1 then
+          first = vim.g.git_base or "master"
+          last = selection[1].value ---@type string
+
+        else
+          first = selection[1].value ---@type string
+          last = selection[size].value ---@type string
+        end
+
+        actions.close(prompt_bufnr)
+        vim.cmd(string.format("DiffviewOpen %s..%s", first, last))
       end)
 
       map('i', '<C-y>', function()
@@ -322,6 +344,14 @@ M.git_commits = function(opts)
         gh_utils.copy_commit_url(hash)
 
         actions.close(prompt_bufnr)
+      end)
+
+      map('i', '<C-b>', function()
+        actions.close(prompt_bufnr)
+        local selection = action_state.get_selected_entry()
+        local git_base = selection.value ---@type string
+
+        git_utils.set_base_branch(git_base)
       end)
 
       return true

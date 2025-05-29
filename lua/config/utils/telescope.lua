@@ -311,7 +311,7 @@ M.git_commits = function(opts)
 
           actions.close(prompt_bufnr)
 
-          vim.cmd(string.format("DiffviewOpen %s^..%s", hash, hash))
+          vim.cmd(string.format("DiffviewOpen %s^!", hash))
           return
         end
 

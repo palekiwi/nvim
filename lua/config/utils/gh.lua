@@ -95,6 +95,20 @@ M.copy_commit_url = function(hash)
   vim.notify("Copied commit URL to clipboard.")
 end
 
+---@param msg string
+M.copy_pr_url_from_message = function(msg)
+  local repo = get_repo()
+  local pr_number = msg:match("pull request #(%d+)")
+
+  if pr_number then
+    local url = "https://github.com/" .. repo .. "/pull/" .. pr_number ---@type string
+    vim.fn.setreg("+", url)
+    vim.notify(string.format("Copied url for PR #%s to clipboard", pr_number))
+  else
+    vim.notify("No PR number in the message")
+  end
+end
+
 M.copy_blame_hash_short = function()
   local file_name = get_file_name()
 

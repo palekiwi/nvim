@@ -287,9 +287,17 @@ end
 -- list "PR commits", i.e. commits that are present on current branch
 -- but absent on the base branch
 M.git_commits = function(opts)
-  local base_branch = os.getenv("GIT_BASE") or "master"
+  local base_branch = os.getenv("GIT_BASE")
+  local args ---@type string
 
-  local command = "git log --pretty=format:'%h %ai %<(20)%an %s' HEAD ^" .. base_branch
+  if base_branch == nil then
+    -- show only merge commits from pull requests
+    args = "--merges --grep='Merge pull request'"
+  else
+    args = "HEAD ^" .. base_branch
+  end
+
+  local command = "git log --pretty=format:'%h %ai %<(20)%an %s' " .. args
 
   local handle = assert(io.popen(command))
   local result = handle:read("*a")
@@ -351,6 +359,13 @@ M.git_commits = function(opts)
         local git_base = selection.value ---@type string
 
         git_utils.set_base_branch(git_base)
+      end)
+
+      map('i', '<C-u>', function()
+        local msg = action_state.get_selected_entry().msg ---@type string
+        gh_utils.copy_pr_url_from_message(msg)
+
+        actions.close(prompt_bufnr)
       end)
 
       return true

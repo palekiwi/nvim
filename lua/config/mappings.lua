@@ -40,6 +40,7 @@ local base = {
   { "<space>eh",    "<cmd>Telescope help_tags<cr>",                                         desc = "Help tags" },
   { "<space>et",    telescope_utils.search_tags,                                            desc = "Search tags" },
   { "<space>ep",    telescope_utils.grep_changed_files,                                     desc = "Live Grep in changed files" },
+  { "<space>eb",    git_utils.diffview_blame,                                               desc = "Diffview blame line" },
   { "<space>ge",    "<cmd>Telescope grep_string word_match=-w<cr>",                         desc = "String Grep" },
   { "<space>t",     git_utils.changed_files_to_loclist,                                     desc = "Change to loclist" },
   { "<space>m",     "<cmd>Himalaya<cr>",                                                    desc = "Himalaya" },

@@ -56,4 +56,52 @@ M.changed_files_to_loclist = function()
   vim.notify("Loclist set to changed files")
 end
 
+local function commit_hash_under_cursor()
+  local line_num = vim.fn.line('.')
+  local filename = vim.fn.expand('%')
+
+  -- Check if we have a valid file
+  if filename == '' or filename == '[No Name]' then
+    print('Error: No file or unsaved buffer')
+    return
+  end
+
+  -- Build the git blame command
+  local cmd = { 'git', 'blame', filename, '-L', line_num .. ',' .. line_num, '--porcelain' }
+
+  -- Execute the command
+  local result = vim.system(cmd, { text = true }):wait()
+
+  if result.code == 0 then
+    -- Extract commit hash (first word of first line)
+    local hash = result.stdout:match('^(%w+)')
+    if hash then
+      -- Check if it's the special "0000000..." hash (uncommitted changes)
+      if hash:match('^0+$') then
+        print('Line not committed yet (working directory changes)')
+        return nil
+      else
+        return hash
+      end
+    else
+      print('Could not extract commit hash')
+    end
+  else
+    -- Handle errors
+    local error_msg = result.stderr or 'Unknown error'
+    if error_msg:match('not a git repository') then
+      print('Error: Not in a git repository')
+    elseif error_msg:match('no such path') then
+      print('Error: File not tracked by git')
+    else
+      print('Git blame failed: ' .. error_msg:gsub('\n', ' '))
+    end
+  end
+end
+
+M.diffview_blame = function()
+  local hash = commit_hash_under_cursor()
+  vim.cmd(string.format("DiffviewOpen %s^!", hash))
+end
+
 return M

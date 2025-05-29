@@ -292,7 +292,7 @@ M.git_commits = function(opts)
 
   if base_branch == nil then
     -- show only merge commits from pull requests
-    args = "--merges --grep='Merge pull request'"
+    args = "--merges --grep='Merge pull request' -n 1000"
   else
     args = "HEAD ^" .. base_branch
   end

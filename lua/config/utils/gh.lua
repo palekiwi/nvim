@@ -98,7 +98,7 @@ end
 ---@param msg string
 M.copy_pr_url_from_message = function(msg)
   local repo = get_repo()
-  local pr_number = msg:match("pull request #(%d+)")
+  local pr_number = msg:match("#(%d+)")
 
   if pr_number then
     local url = "https://github.com/" .. repo .. "/pull/" .. pr_number ---@type string

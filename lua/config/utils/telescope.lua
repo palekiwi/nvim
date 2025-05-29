@@ -320,16 +320,15 @@ M.git_commits = function(opts)
         local last ---@type string
 
         if size == 1 then
-          first = vim.g.git_base or "master"
-          last = selection[1].value ---@type string
-
+          first = selection[1].value ---@type string
+          last = "HEAD"
         else
           first = selection[1].value ---@type string
           last = selection[size].value ---@type string
         end
 
         actions.close(prompt_bufnr)
-        vim.cmd(string.format("DiffviewOpen %s..%s", first, last))
+        vim.cmd(string.format("DiffviewOpen %s...%s", first, last))
       end)
 
       map('i', '<C-y>', function()

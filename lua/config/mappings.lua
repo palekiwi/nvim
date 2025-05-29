@@ -14,6 +14,9 @@ local set = vim.keymap.set
 set({ 'n', 'v' }, '<Down>', 'gj')
 set({ 'n', 'v' }, '<Up>', 'gk')
 
+vim.keymap.set('n', 'h', ']c')
+vim.keymap.set('n', 'H', '[c')
+
 vim.api.nvim_set_keymap('v', '<C-C>', '"+y', { noremap = true, silent = true })
 
 -- Set the default step size to 5
@@ -82,7 +85,6 @@ local base = {
   { "<space>w",     nvim_utils.toggle_wrap,                                                 desc = "Toggle Wrap" },
   { "<space>x",     "<cmd>quit<cr>",                                                        desc = "Quit" },
   { "<space>y",     "<cmd>%y+<cr>",                                                         desc = "Copy contents to clipboard" },
-  { "H",            git_utils.prev_hunk,                                                    desc = "Prev hunk" },
   { "T",            kiwi.todo.toggle,                                                       desc = "Toggle Todo" },
   { "W",            "<cmd>HopWord<cr>",                                                     desc = "Hop Word",                          mode = "n" },
   { "g",            group = "go to" },
@@ -91,7 +93,6 @@ local base = {
   { "gi",           vim.lsp.buf.implementation,                                             desc = "[LSP] Go to Implementation" },
   { "gr",           vim.lsp.buf.references,                                                 desc = "[LSP] Go to References" },
   { "gt",           vim.lsp.buf.type_definition,                                            desc = "[LSP] Go to Type Definition" },
-  { "h",            git_utils.next_hunk,                                                    desc = "Next hunk" },
   { "l",            "<cmd>HopLineStart<cr>",                                                desc = "Hop Line Start",                    mode = { "n", "v" } },
   { "s",            "<cmd>HopChar1<cr>",                                                    desc = "Hop Char 1",                        mode = { "n", "v" } },
   -- toggle

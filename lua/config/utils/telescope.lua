@@ -408,13 +408,6 @@ M.git_commits = function(opts)
         git_utils.set_base_branch(git_base)
       end)
 
-      map('i', '<C-u>', function()
-        local msg = action_state.get_selected_entry().msg ---@type string
-        gh_utils.copy_pr_url_from_message(msg)
-
-        actions.close(prompt_bufnr)
-      end)
-
       return true
     end
   }

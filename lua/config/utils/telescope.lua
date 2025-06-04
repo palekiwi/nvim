@@ -646,6 +646,10 @@ M.git_commits = function(opts)
 
   pickers.new(opts, {
     prompt_title = "PR Commits",
+    layout_config = {
+      preview_height = 0.5,
+    },
+
     finder = finders.new_table {
       results = files,
       entry_maker = gen_from_git_commits(opts)

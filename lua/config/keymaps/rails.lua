@@ -7,10 +7,21 @@ local function find_files(dirs)
   builtin.find_files({ search_dirs = dirs })
 end
 
+local function grep_string_tailwind()
+  builtin.grep_string {
+    prompt_title = "Grep String: Tailwind",
+    default_text = vim.fn.expand("<cfile>"),
+    search_dirs = {
+        "app/assets/tailwind/"
+    },
+    word_match = "-w"
+  }
+end
+
 set("n", "<A-r>", rails_utils.find_template_render, { desc = "[Rails] Where is current view renedered?" })
 set("n", "<A-t>", rails_utils.find_template, { desc = "[Rails] Find this template" })
 
-set("n", "<leader>gt", rails_utils.find_template, { desc = "[Rails] Find this template" })
+set("n", "<leader>gt", grep_string_tailwind, { desc = "[Rails] Find this template" })
 set("n", "<C-s>", rails_utils.alternate, { desc = "[Rails] Find Spec" })
 set("n", "<leader>dd", rails_utils.show_diagnostics, { desc = "[Diagnostic] RSpec" })
 

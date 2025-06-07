@@ -35,6 +35,7 @@ local base = {
   { "<A-Down>",     "<cmd>cnext<cr>",                                                       desc = "[Qflist] Next" },
   { "<A-PageUp>",   "<cmd>lprev<cr>",                                                       desc = "[Loclist] Prev" },
   { "<A-PageDown>", "<cmd>lnext<cr>",                                                       desc = "[Loclist] Next" },
+  { "<space>ec",    telescope_utils.git_commits,                                            desc = "[Telescope] All commits" },
   { "<space>eg",    telescope_utils.git_pr_commits,                                         desc = "[Telescope] Branch commits" },
   { "<space>em",    telescope_utils.git_pr_merge_commits,                                   desc = "[Telescope] PR Merge commits" },
   { "<space>es",    "<cmd>Telescope current_buffer_tags show_line=true<cr>",                desc = "Tags" },

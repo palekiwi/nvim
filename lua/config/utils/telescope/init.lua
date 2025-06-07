@@ -153,6 +153,93 @@ M.diffview_since = function()
   vim.cmd(cmd)
 end
 
+M.git_commits = function(opts)
+  local command = "git log -n 1000 --pretty=format:'%h %ai %<(20)%an %s'"
+
+  local handle = assert(io.popen(command))
+  local result = handle:read("*a")
+  handle:close()
+
+  local files = {}
+  for token in string.gmatch(result, "[^\n]+") do
+    table.insert(files, token)
+  end
+
+  opts = {
+    attach_mappings = function(prompt_bufnr, map)
+      actions.select_default:replace(function()
+        local picker = action_state.get_current_picker(prompt_bufnr)
+        local selection = picker:get_multi_selection() ---@type table?
+
+        if selection == nil or vim.tbl_isempty(selection) then
+          local hash = action_state.get_selected_entry().value ---@type string
+
+          actions.close(prompt_bufnr)
+
+          vim.cmd(string.format("DiffviewOpen %s^!", hash))
+          return
+        end
+
+        local size = #selection
+        local first ---@type string
+        local last ---@type string
+
+        if size == 1 then
+          first = selection[1].value ---@type string
+          last = "HEAD"
+        else
+          first = selection[1].value ---@type string
+          last = selection[size].value ---@type string
+        end
+
+        actions.close(prompt_bufnr)
+        vim.cmd(string.format("DiffviewOpen %s...%s", first, last))
+      end)
+
+      map('i', '<C-h>', function()
+        local hash = action_state.get_selected_entry().value ---@type string
+        vim.fn.setreg('+', hash)
+
+        actions.close(prompt_bufnr)
+      end)
+
+      map('i', '<C-y>', function()
+        local hash = action_state.get_selected_entry().value ---@type string
+        gh_utils.copy_commit_url(hash)
+
+        actions.close(prompt_bufnr)
+      end)
+
+      map('i', '<C-b>', function()
+        actions.close(prompt_bufnr)
+        local selection = action_state.get_selected_entry()
+        local git_base = selection.value ---@type string
+
+        git_utils.set_base_branch(git_base)
+      end)
+
+      return true
+    end
+  }
+
+  pickers.new(opts, {
+    prompt_title = "PR Commits",
+    layout_config = {
+      preview_height = 0.5,
+    },
+
+    finder = finders.new_table {
+      results = files,
+      entry_maker = custom_entry_makers.gen_from_git_commits(opts)
+    },
+    previewer = {
+      custom_previewers.diff_previewer,
+      custom_previewers.changed_files_tree_previewer,
+    },
+    sorter = conf.generic_sorter(opts),
+  }):find()
+end
+
 -- list "PR commits", i.e. commits that are present on current branch
 -- but absent on the base branch
 M.git_pr_commits = function(opts)

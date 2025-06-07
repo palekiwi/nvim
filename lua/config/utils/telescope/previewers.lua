@@ -199,6 +199,43 @@ M.changed_files_tree_previewer = previewers.new_buffer_previewer({
   end
 })
 
+M.changed_files_previewer = previewers.new_buffer_previewer({
+  title = "Changed Files",
+  define_preview = function(self, entry, _status)
+    local commit_hash = entry.value:match("^(%w+)") ---@type string
+
+    -- Get just the file names
+    local changed_files = vim.fn.system(string.format(
+      "git diff --name-status %s^1..%s",
+      commit_hash,
+      commit_hash
+    ))
+
+    local lines = {}
+    for filename in changed_files:gmatch("[^\n]+") do
+      if filename ~= "" then
+        table.insert(lines, filename)
+      end
+    end
+
+    vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+
+    -- Add syntax highlighting for git status
+    vim.api.nvim_buf_call(self.state.bufnr, function()
+      vim.cmd("syntax clear")
+      vim.cmd("syntax match GitAdded /^A\\s.*$/")
+      vim.cmd("syntax match GitDeleted /^D\\s.*$/")
+      vim.cmd("syntax match GitRenamed /^R[0-9]*\\s.*$/")
+      vim.cmd("syntax match GitCopied /^C[0-9]*\\s.*$/")
+
+      vim.cmd("highlight GitAdded ctermfg=Green guifg=#6e9440")
+      vim.cmd("highlight GitDeleted ctermfg=Red guifg=#cc6666")
+      vim.cmd("highlight GitRenamed ctermfg=Blue guifg=#85678f")
+      vim.cmd("highlight GitCopied ctermfg=Cyan guifg=#de935f")
+    end)
+  end,
+})
+
 
 M.diff_previewer = previewers.new_buffer_previewer({
   title = "Git Diff",

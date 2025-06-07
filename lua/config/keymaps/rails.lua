@@ -25,11 +25,19 @@ local function grep_string_sass()
   }
 end
 
+local function live_grep_specs()
+  builtin.live_grep {
+    prompt_title = "Live Grep: Specs",
+    search_dirs = { "spec" },
+  }
+end
+
 set("n", "<A-r>", rails_utils.find_template_render, { desc = "[Rails] Where is current view renedered?" })
 set("n", "<A-t>", rails_utils.find_template, { desc = "[Rails] Find this template" })
 
 set("n", "<leader>gt", grep_string_tailwind, { desc = "[Grep String] Tailwind" })
 set("n", "<leader>gy", grep_string_sass, { desc = "[Grep String] Sass" })
+set("n", "<space>gs", live_grep_specs, { desc = "[Live Grep] Specs" })
 set("n", "<C-s>", rails_utils.alternate, { desc = "[Rails] Find Spec" })
 set("n", "<leader>dd", rails_utils.show_diagnostics, { desc = "[Diagnostic] RSpec" })
 

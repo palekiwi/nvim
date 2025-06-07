@@ -14,14 +14,6 @@ local gh_utils = require('config.utils.gh')
 
 M = {}
 
-local delta = previewers.new_termopen_previewer {
-  get_command = function(entry)
-    local base_branch = vim.g.git_base or "master"
-
-    return { 'git', '--no-pager', 'diff', '--unified=0', base_branch .. '..HEAD', entry.value }
-  end
-}
-
 local custom_file_diff_previewer = previewers.new_buffer_previewer({
   title = "File Diff",
   define_preview = function(self, entry, _status)

@@ -1,6 +1,8 @@
 local previewers = require "telescope.previewers"
 local utils = require('telescope.previewers.utils')
 
+local ns_id = vim.api.nvim_create_namespace("custom_telescope_previewers")
+
 M = {}
 
 M.changed_files_tree_previewer = previewers.new_buffer_previewer({
@@ -15,17 +17,17 @@ M.changed_files_tree_previewer = previewers.new_buffer_previewer({
     ))
 
     -- Define custom highlight group for renames
-    vim.api.nvim_set_hl(0, 'GitFileRenamed', { fg = '#de935f', bold = true })   -- Orange/bold
+    vim.api.nvim_set_hl(0, 'GitFileRenamed', { fg = '#de935f', bold = true }) -- Orange/bold
 
     local function get_status_highlight(status)
       local highlights = {
-        A = "GitSignsAdd",           -- Added (green)
-        M = "GitSignsChange",        -- Modified (blue/yellow)
-        D = "GitSignsDelete",        -- Deleted (red)
-        ["R+"] = "GitFileRenamed",   -- Renamed to (orange)
-        ["R-"] = "GitFileRenamed",   -- Renamed from (orange)
-        T = "GitSignsChange",        -- Type changed (blue/yellow)
-        U = "ErrorMsg",              -- Unmerged (red/error)
+        A = "GitSignsAdd",         -- Added (green)
+        M = "GitSignsChange",      -- Modified (blue/yellow)
+        D = "GitSignsDelete",      -- Deleted (red)
+        ["R+"] = "GitFileRenamed", -- Renamed to (orange)
+        ["R-"] = "GitFileRenamed", -- Renamed from (orange)
+        T = "GitSignsChange",      -- Type changed (blue/yellow)
+        U = "ErrorMsg",            -- Unmerged (red/error)
       }
 
       -- Handle rename statuses like "R063"
@@ -183,17 +185,19 @@ M.changed_files_tree_previewer = previewers.new_buffer_previewer({
     vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, formatted_lines)
 
     -- Apply syntax highlighting
-    vim.api.nvim_buf_set_option(self.state.bufnr, 'filetype', 'git')
+    vim.api.nvim_set_option_value('filetype', 'git', { buf = self.state.bufnr })
 
     -- Apply custom highlights
     for _, hl in ipairs(highlights) do
-      vim.api.nvim_buf_add_highlight(
+      vim.api.nvim_buf_set_extmark(
         self.state.bufnr,
-        -1,            -- namespace
-        hl.hl_group,
-        hl.line - 1,   -- 0-indexed
+        ns_id,          -- namespace
+        hl.line - 1, -- 0-indexed
         hl.col_start,
-        hl.col_end
+        {
+          end_col = hl.col_end,
+          hl_group = hl.hl_group
+        }
       )
     end
   end

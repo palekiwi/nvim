@@ -152,7 +152,7 @@ M.changed_files = function(opts)
 end
 
 -- live grep in change files
-M.grep_changed_files = function(opts)
+M.grep_changed_files = function(_opts)
   local success, result = pcall(last_commit_on_base)
 
   if not success then
@@ -404,42 +404,6 @@ M.git_commits = function(opts)
     end
   }
 
-  local changed_files_previewer = previewers.new_buffer_previewer({
-    title = "Changed Files",
-    define_preview = function(self, entry, _status)
-      local commit_hash = entry.value:match("^(%w+)") ---@type string
-
-      -- Get just the file names
-      local changed_files = vim.fn.system(string.format(
-        "git show --name-status --format='' %s",
-        commit_hash
-      ))
-
-      local lines = {}
-      for filename in changed_files:gmatch("[^\n]+") do
-        if filename ~= "" then
-          table.insert(lines, filename)
-        end
-      end
-
-      vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
-
-      -- Add syntax highlighting for git status
-      vim.api.nvim_buf_call(self.state.bufnr, function()
-        vim.cmd("syntax clear")
-        vim.cmd("syntax match GitAdded /^A\\s.*$/")
-        vim.cmd("syntax match GitDeleted /^D\\s.*$/")
-        vim.cmd("syntax match GitRenamed /^R[0-9]*\\s.*$/")
-        vim.cmd("syntax match GitCopied /^C[0-9]*\\s.*$/")
-
-        vim.cmd("highlight GitAdded ctermfg=Green guifg=#6e9440")
-        vim.cmd("highlight GitDeleted ctermfg=Red guifg=#cc6666")
-        vim.cmd("highlight GitRenamed ctermfg=Blue guifg=#85678f")
-        vim.cmd("highlight GitCopied ctermfg=Cyan guifg=#de935f")
-      end)
-    end,
-  })
-
   local changed_files_tree_previewer = previewers.new_buffer_previewer({
     title = "Changed Files",
     define_preview = function(self, entry, _status)
@@ -530,7 +494,7 @@ M.git_commits = function(opts)
         return tree
       end
 
-      local function format_tree(tree, prefix, is_last, lines, highlights)
+      local function format_tree(tree, prefix, _is_last, lines, highlights)
         lines = lines or {}
         highlights = highlights or {}
         local keys = vim.tbl_keys(tree)

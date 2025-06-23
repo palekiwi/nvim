@@ -121,7 +121,7 @@ M.copy_blame_hash_short = function()
 end
 
 M.copy_files_changed_url = function()
-  local pr_number = vim.g.pr_number
+  local pr_number = vim.g.gh_pr_number
   if not pr_number then
     return
   end

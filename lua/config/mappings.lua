@@ -108,11 +108,12 @@ local base = {
   { "tf",           "<cmd>Neotree float git_status<cr>",                                    desc = "Float git status" },
   { "th",           "<cmd>Gitsigns preview_hunk_inline<cr>",                                desc = "Deleted" },
   { "tm",           function() git_utils.set_base_branch("master") end,                     desc = "Change base: master" },
-  { "tn",           function() git_utils.diffthis(true) end,                                desc = "Diff this: vertical" },
-  { "tN",           "<cmd>DiffviewOpen<cr>",                                                desc = "DiffviewOpen" },
+  { "ti",           function() git_utils.diffthis(true) end,                                desc = "Diff this: vertical" },
+  { "tc",           "<cmd>DiffviewOpen<cr>",                                                desc = "DiffviewOpen" },
+  { "tH",           "<cmd>DiffviewOpen HEAD<cr>",                                           desc = "DiffviewOpen" },
   { "tq",           git_utils.hunks_to_loclist,                                             desc = "Hunks to Loclist" },
   { "tl",           "<cmd>nohlsearch<cr>",                                                  desc = "Hunks to Loclist" },
-  { "ti",           git_utils.diffview_this,                                                desc = "Diff this: horizontal" },
+  { "tn",           git_utils.diffview_this,                                                desc = "Diff this: horizontal" },
   { "tI",           "<cmd>DiffviewClose<cr>",                                               desc = "DiffviewClose" },
   { "<leader>y",    group = "Copy to clipboard" },
   { "<leader>yb",   function() gh_utils.copy_file_url({ branch = vim.g.git_base }) end,     desc = "GH file: base" },
@@ -127,8 +128,8 @@ local base = {
   { "<leader>lr",   "<cmd>LspRestart<cr>",                                                  desc = "LSP: Restart" },
 }
 
-set("n", "<leader>dn", vim.diagnostic.goto_next, { desc = "[Diagnostic] next" })
-set("n", "<leader>dp", vim.diagnostic.goto_prev, { desc = "[Diagnostic] prev" })
+set("n", "<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, { desc = "[Diagnostic] next" })
+set("n", "<leader>dp", function() vim.diagnostic.jump({ count = -1, float = true }) end, { desc = "[Diagnostic] prev" })
 set("n", "<leader>df", vim.diagnostic.open_float, { desc = "[Diagnostic] float" })
 
 set("n", "<leader>x", "<cmd>.lua<CR>", { desc = "Execute the current line" })

@@ -115,6 +115,7 @@ local base = {
   { "tl",           "<cmd>nohlsearch<cr>",                                                  desc = "Hunks to Loclist" },
   { "tn",           git_utils.diffview_this,                                                desc = "Diff this: horizontal" },
   { "tI",           "<cmd>DiffviewClose<cr>",                                               desc = "DiffviewClose" },
+  { "tN",           "<cmd>DiffviewClose<cr>",                                               desc = "DiffviewClose" },
   { "<leader>y",    group = "Copy to clipboard" },
   { "<leader>yb",   function() gh_utils.copy_file_url({ branch = vim.g.git_base }) end,     desc = "GH file: base" },
   { "<leader>yc",   gh_utils.copy_files_changed_url,                                        desc = "GH files changed" },

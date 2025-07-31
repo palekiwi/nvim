@@ -352,8 +352,8 @@ M.git_pr_merge_commits = function(opts)
       end)
 
       map('i', '<C-y>', function()
-        local msg = action_state.get_selected_entry().msg ---@type string
-        gh_utils.copy_pr_url_from_message(msg)
+        local number_str = action_state.get_selected_entry().number ---@type string
+        gh_utils.copy_pr_url_from_string(number_str)
 
         actions.close(prompt_bufnr)
       end)

@@ -95,10 +95,10 @@ M.copy_commit_url = function(hash)
   vim.notify("Copied commit URL to clipboard.")
 end
 
----@param msg string
-M.copy_pr_url_from_message = function(msg)
+---@param str string
+M.copy_pr_url_from_string = function(str)
   local repo = get_repo()
-  local pr_number = msg:match("#(%d+)")
+  local pr_number = str:match("#(%d+)")
 
   if pr_number then
     local url = "https://github.com/" .. repo .. "/pull/" .. pr_number ---@type string

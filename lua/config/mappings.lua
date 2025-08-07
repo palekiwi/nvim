@@ -126,7 +126,6 @@ local base = {
   { "<leader>yp",   function() gh_utils.copy_file_url({ branch = vim.fn.getreg("+") }) end, desc = "GH file: clipboard" },
   { "<leader>li",   "<cmd>LspInfo<cr>",                                                     desc = "LSP: Info" },
   { "<leader>ll",   "<cmd>LspLog<cr>",                                                      desc = "LSP: Log" },
-  { "<leader>lr",   "<cmd>LspRestart<cr>",                                                  desc = "LSP: Restart" },
 }
 
 set("n", "<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, { desc = "[Diagnostic] next" })

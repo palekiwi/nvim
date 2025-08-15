@@ -13,6 +13,32 @@ local function toggle_git_tree(action, toggle)
   })
 end
 
+M.get_default_branch = function()
+  -- First try: Get the default branch from remote HEAD
+  local result = vim.fn.system("git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null")
+  if vim.v.shell_error == 0 and result ~= "" then
+    local branch = result:match("refs/remotes/origin/(.+)")
+    if branch then
+      return branch:gsub("%s+", "")
+    end
+  end
+
+  -- Second try: Check if origin/HEAD exists but isn't set up properly
+  -- This will set it up automatically
+  vim.fn.system("git remote set-head origin --auto 2>/dev/null")
+  if vim.v.shell_error == 0 then
+    result = vim.fn.system("git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null")
+    if vim.v.shell_error == 0 and result ~= "" then
+      local branch = result:match("refs/remotes/origin/(.+)")
+      if branch then
+        return branch:gsub("%s+", "")
+      end
+    end
+  end
+
+  return "master"
+end
+
 local function set_base_branch(branch)
   local base_branch = branch or "master"
 

@@ -40,6 +40,7 @@ local base = {
   { "<space>em",    telescope_utils.git_pr_merge_commits,                                   desc = "[Telescope] PR Merge commits" },
   { "<space>es",    "<cmd>Telescope current_buffer_tags show_line=true<cr>",                desc = "Tags" },
   { "<space>eh",    "<cmd>Telescope help_tags<cr>",                                         desc = "Help tags" },
+  { "<space>eH",    require('config.utils.telescope.hunk_grep'),                            desc = "Hunk grep" },
   { "<space>et",    telescope_utils.search_tags,                                            desc = "Search tags" },
   { "<space>ep",    telescope_utils.grep_changed_files,                                     desc = "Live Grep in changed files" },
   { "<space>eb",    git_utils.diffview_blame,                                               desc = "Diffview blame line" },

@@ -10,7 +10,7 @@ M.last_commit_on_base = function()
 
   assert(vim.v.shell_error == 0, last_commit_on_base)
 
-  return last_commit_on_base
+  return vim.trim(last_commit_on_base)
 end
 
 return M

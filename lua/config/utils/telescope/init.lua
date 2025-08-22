@@ -49,19 +49,30 @@ M.lsp_references = function()
   })
 end
 
--- search in files that have changed since a particular commit (base branch)
-M.changed_files = function(opts)
+--- search in files that have changed since a particular commit (base branch)
+---@param search_dir string?
+M.changed_files = function(search_dir)
   local success, result = pcall(custom_helpers.last_commit_on_base)
 
   if not success then
-    return vim.api.nvim_echo({
+    vim.api.nvim_echo({
       { "Changed files: " .. result, "ErrorMsg" },
     }, true, {})
+    return
   end
 
-  local files = vim.fn.systemlist("git diff --name-only " .. result)
+  local title = "Changed files"
 
-  opts = {
+  local git_cmd = "git diff --name-only " .. result
+
+  if search_dir then
+    git_cmd = git_cmd .. " -- " .. search_dir
+    title = title .. ": " .. search_dir
+  end
+
+  local files = vim.fn.systemlist(git_cmd)
+
+  local opts = {
     attach_mappings = function(_prompt_bufnr, map)
       map('i', '<C-l>', actions.smart_send_to_loclist + actions.open_loclist)
 
@@ -70,7 +81,7 @@ M.changed_files = function(opts)
   }
 
   pickers.new(opts, {
-    prompt_title = "changed files",
+    prompt_title = title,
     finder = finders.new_table {
       results = files,
       entry_maker = make_entry.gen_from_file(opts)

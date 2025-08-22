@@ -1,5 +1,6 @@
 local rails_utils = require('rails-utils')
 local builtin = require('telescope.builtin')
+local telescope_utils = require('config.utils.telescope')
 
 local set = vim.keymap.set
 
@@ -63,13 +64,13 @@ set("n", "<leader>rdf", "<cmd>RspecRunnerTermFailures<cr>", { desc = "[RSpec] Te
 set("n", "<leader>rdl", "<cmd>RspecRunnerTermLast<cr>", { desc = "[RSpec] Terminal Last" })
 set("n", "<C-l>", "<cmd>RspecRunnerShowResults<cr>", { desc = "[RSpec] Results" })
 
-set("n", "<leader>sC", function() find_files({ "app/contracts" }) end, { desc = "Contracts" })
-set("n", "<leader>sS", function() find_files({ "app/services" }) end, { desc = "Services" })
-set("n", "<leader>sc", function() find_files({ "app/controllers" }) end, { desc = "Controllers" })
-set("n", "<leader>se", function() find_files({ "webpack/src/components/elm" }) end, { desc = "Elm" })
-set("n", "<leader>sp", function() find_files({ "app/presenters" }) end, { desc = "Presenters" })
-set("n", "<leader>sr", function() find_files({ "app/services" }) end, { desc = "Services" })
-set("n", "<leader>ss", function() find_files({ "spec/" }) end, { desc = "Specs" })
-set("n", "<leader>st", function() find_files({ "webpack/src/controllers" }) end, { desc = "Stimulus" })
-set("n", "<leader>sv", function() find_files({ "app/views" }) end, { desc = "Views" })
-set("n", "<leader>sy", function() find_files({ "webpack/src/styles" }) end, { desc = "Styles" })
+set("n", "<leader>sC", function() telescope_utils.changed_files("app/contracts") end, { desc = "Contracts" })
+set("n", "<leader>sS", function() telescope_utils.changed_files("app/services") end, { desc = "Services" })
+set("n", "<leader>sc", function() telescope_utils.changed_files("app/controllers") end, { desc = "Controllers" })
+set("n", "<leader>se", function() telescope_utils.changed_files("webpack/src/components/elm") end, { desc = "Elm" })
+set("n", "<leader>sp", function() telescope_utils.changed_files("app/presenters") end, { desc = "Presenters" })
+set("n", "<leader>sr", function() telescope_utils.changed_files("app/services") end, { desc = "Services" })
+set("n", "<leader>ss", function() telescope_utils.changed_files("spec/") end, { desc = "Specs" })
+set("n", "<leader>st", function() telescope_utils.changed_files("webpack/src/controllers") end, { desc = "Stimulus" })
+set("n", "<leader>sv", function() telescope_utils.changed_files("app/views") end, { desc = "Views" })
+set("n", "<leader>sy", function() telescope_utils.changed_files("webpack/src/styles") end, { desc = "Styles" })

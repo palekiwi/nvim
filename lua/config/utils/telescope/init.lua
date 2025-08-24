@@ -92,16 +92,27 @@ M.changed_files = function(search_dir)
 end
 
 -- live grep in change files
-M.grep_changed_files = function(_opts)
+---@param search_dir string?
+M.grep_changed_files = function(search_dir)
   local success, result = pcall(custom_helpers.last_commit_on_base)
 
   if not success then
-    return vim.api.nvim_echo({
+    vim.api.nvim_echo({
       { "Changed files: " .. result, "ErrorMsg" },
     }, true, {})
+    return
   end
 
-  local files = vim.fn.systemlist("git diff --name-only " .. result)
+  local title = "Changed files"
+
+  local git_cmd = "git diff --name-only " .. result
+
+  if search_dir then
+    git_cmd = git_cmd .. " -- " .. search_dir
+    title = title .. ": " .. search_dir
+  end
+
+  local files = vim.fn.systemlist(git_cmd)
 
   builtin.live_grep {
     prompt_title = "Grep in Changed Files",

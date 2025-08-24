@@ -74,3 +74,15 @@ set("n", "<leader>ss", function() telescope_utils.changed_files("spec/") end, { 
 set("n", "<leader>st", function() telescope_utils.changed_files("webpack/src/controllers") end, { desc = "Stimulus" })
 set("n", "<leader>sv", function() telescope_utils.changed_files("app/views") end, { desc = "Views" })
 set("n", "<leader>sy", function() telescope_utils.changed_files("webpack/src/styles") end, { desc = "Styles" })
+
+set("n", "<leader>SC", function() telescope_utils.grep_changed_files("app/contracts") end, { desc = "Contracts" })
+set("n", "<leader>SS", function() telescope_utils.grep_changed_files("app/services") end, { desc = "Services" })
+set("n", "<leader>Sc", function() telescope_utils.grep_changed_files("app/controllers") end, { desc = "Controllers" })
+set("n", "<leader>Se", function() telescope_utils.grep_changed_files("webpack/src/components/elm") end, { desc = "Elm" })
+set("n", "<leader>Sp", function() telescope_utils.grep_changed_files("app/presenters") end, { desc = "Presenters" })
+set("n", "<leader>Sr", function() telescope_utils.grep_changed_files("app/services") end, { desc = "Services" })
+set("n", "<leader>Ss", function() telescope_utils.grep_changed_files("spec/") end, { desc = "Specs" })
+set("n", "<leader>St", function() telescope_utils.grep_changed_files("webpack/src/controllers") end,
+  { desc = "Stimulus" })
+set("n", "<leader>Sv", function() telescope_utils.grep_changed_files("app/views") end, { desc = "Views" })
+set("n", "<leader>Sy", function() telescope_utils.grep_changed_files("webpack/src/styles") end, { desc = "Styles" })

@@ -36,17 +36,12 @@ end
 set("n", "<A-r>", rails_utils.find_template_render, { desc = "[Rails] Where is current view renedered?" })
 set("n", "<A-t>", rails_utils.find_template, { desc = "[Rails] Find this template" })
 
-set("n", "<leader>gt", grep_string_tailwind, { desc = "[Grep String] Tailwind" })
-set("n", "<leader>gy", grep_string_sass, { desc = "[Grep String] Sass" })
-set("n", "<space>gs", live_grep_specs, { desc = "[Live Grep] Specs" })
+-- set("n", "<leader>gt", grep_string_tailwind, { desc = "[Grep String] Tailwind" })
+-- set("n", "<leader>gy", grep_string_sass, { desc = "[Grep String] Sass" })
+-- set("n", "<space>gs", live_grep_specs, { desc = "[Live Grep] Specs" })
 set("n", "<C-s>", rails_utils.alternate, { desc = "[Rails] Find Spec" })
 set("n", "<leader>dd", rails_utils.show_diagnostics, { desc = "[Diagnostic] RSpec" })
-set("n", "<leader>lr", "<cmd>LspRestart ruby_lsp stimulus_ls<cr>", { desc = "[LSP] Restart" })
-
---- set("n", "<leader>rp", function() rails_utils.run_tests({ scope = "pr" }) end, { desc = "[RSpec] Test PR" })
---- set("n", "<leader>rt", function() rails_utils.run_tests({ scope = "file" }) end, { desc = "[RSpec] Test file" })
---- set("n", "<leader>rs", "<cmd>RSpecLiveTestOnSave<cr>", { desc = "[RSpec] Activate test on save" })
---- set("n", "<leader>rc", "<cmd>RSpecLiveTestOnSaveCancel<cr>", { desc = "[RSpec] Cancel test on save" })
+set("n", "<leader>lr", "<cmd>LspRestart ruby_lsp stimulus_ls<cr>", { desc = "[LSP] Rails Restart" })
 
 set("n", "<leader>ra", "<cmd>RspecRunnerAll<cr>", { desc = "[RSpec] Test All" })
 set("n", "<leader>rp", "<cmd>RspecRunnerBase<cr>", { desc = "[RSpec] Test Base" })

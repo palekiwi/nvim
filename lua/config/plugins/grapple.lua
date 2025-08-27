@@ -1,6 +1,7 @@
 return {
   {
     "cbochs/grapple.nvim",
+    enabled = true,
     opts = {
       scope = "git_branch",
     },

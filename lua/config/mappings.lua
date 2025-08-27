@@ -101,6 +101,7 @@ local base = {
   { "<leader>dn",      function() vim.diagnostic.jump({ count = 1, float = true }) end,        desc = "[Diagnostic] next" },
   { "<leader>dp",      function() vim.diagnostic.jump({ count = -1, float = true }) end,       desc = "[Diagnostic] prev" },
   { "<leader>eg",      telescope_utils.search_tags_cword,                                      desc = "Find tag" },
+  { "<leader>eh",      "<cmd>Telescope help_tags<cr>",                                         desc = "Help tags" },
   { "<leader>es",      "<cmd>Telescope current_buffer_tags show_line=true<cr>",                desc = "Tags" },
   { "<leader>et",      telescope_utils.search_tags,                                            desc = "Search tags" },
   { "<leader>fe",      "<cmd>only<cr>",                                                        desc = "Only" },
@@ -109,8 +110,7 @@ local base = {
   { "<leader>gH",      require('config.utils.telescope.hunk_grep'),                            desc = "Hunk grep" },
   { "<leader>ga",      telescope_utils.git_commits,                                            desc = "[Telescope] All commits" },
   { "<leader>gb",      git_utils.diffview_blame,                                               desc = "Diffview blame line" },
-  { "<leader>ge",      telescope_utils.git_pr_commits,                                         desc = "[Telescope] Branch commits" },
-  { "<leader>gh",      "<cmd>Telescope help_tags<cr>",                                         desc = "Help tags" },
+  { "<leader>gh",      telescope_utils.git_pr_commits,                                         desc = "[Telescope] Branch commits" },
   { "<leader>gm",      telescope_utils.git_pr_merge_commits,                                   desc = "[Telescope] PR Merge commits" },
   { "<leader>gp",      telescope_utils.grep_changed_files,                                     desc = "Live Grep in changed files" },
   { "<leader>gr",      "<cmd>Gitsigns reset_hunk<cr>",                                         desc = "[Gitsigns] Reset Hunk" },
@@ -133,7 +133,6 @@ local base = {
   { "<leader>ym",      function() gh_utils.copy_file_url({ branch = "master" }) end,           desc = "GH file: master" },
   { "<leader>yp",      function() gh_utils.copy_file_url({ branch = vim.fn.getreg("+") }) end, desc = "GH file: clipboard" },
 }
-
 
 set("n", "<leader>x", "<cmd>.lua<CR>", { desc = "Execute the current line" })
 set("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })

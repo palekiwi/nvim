@@ -70,6 +70,8 @@ set("n", "<leader>st", function() telescope_utils.changed_files("webpack/src/con
 set("n", "<leader>sv", function() telescope_utils.changed_files("app/views") end, { desc = "Views" })
 set("n", "<leader>sy", function() telescope_utils.changed_files("webpack/src/styles") end, { desc = "Styles" })
 
+set("n", "<leader>sF", function() find_files({ "config/initializers/feature_switches" }) end, { desc = "Contracts" })
+
 set("n", "<leader>SC", function() telescope_utils.grep_changed_files("app/contracts") end, { desc = "Contracts" })
 set("n", "<leader>SS", function() telescope_utils.grep_changed_files("app/services") end, { desc = "Services" })
 set("n", "<leader>Sc", function() telescope_utils.grep_changed_files("app/controllers") end, { desc = "Controllers" })

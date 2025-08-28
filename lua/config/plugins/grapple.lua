@@ -2,11 +2,9 @@ return {
   {
     "cbochs/grapple.nvim",
     enabled = true,
-    opts = {
-      scope = "git_branch",
-    },
     config = function()
       require("telescope").load_extension("grapple")
+      require("grapple").setup({ scope = "git_branch", }) -- setting it up in opts did not take effect
     end,
     event = { "BufReadPost", "BufNewFile" },
     cmd = "Grapple",

@@ -7,7 +7,7 @@ local previewers = require('telescope.previewers')
 
 local function parse_git_diff()
   -- Get git diff output against master
-  local base = vim.g.git_base or "master"
+  local base = vim.g.git_base or vim.g.git_master or "master"
   local diff_cmd = "git diff " .. base .. " --no-prefix --unified=3"
   local diff_output = vim.fn.system(diff_cmd)
 

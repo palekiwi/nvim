@@ -282,7 +282,7 @@ M.diff_previewer = previewers.new_buffer_previewer({
 M.file_diff_previewer = previewers.new_buffer_previewer({
   title = "File Diff",
   define_preview = function(self, entry, _status)
-    local base_branch = vim.g.git_base or "master"
+    local base_branch = vim.g.git_base or vim.g.git_master or "master"
 
     local diff_output = vim.fn.system(
       "git --no-pager diff --color=never --unified=3 " .. base_branch .. '..HEAD ' .. entry.value

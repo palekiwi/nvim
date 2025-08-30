@@ -5,7 +5,7 @@ M.last_commit_on_base = function()
     "git",
     "merge-base",
     "HEAD",
-    vim.g.git_base or "master"
+    vim.g.git_base or vim.g.git_master or "master"
   })
 
   assert(vim.v.shell_error == 0, last_commit_on_base)

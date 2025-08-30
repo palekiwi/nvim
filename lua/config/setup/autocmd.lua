@@ -18,7 +18,7 @@ end
 
 --- Sets git base name on startup 
 local function set_git_base()
-  create_autocmd("VimEnter", {
+  create_autocmd("VimEnter", { -- TODO: consider other events to update the value when the branch changes
     callback = function()
       local handle = io.popen("get_pr_base")
       local base_branch = vim.g.git_master or "master" -- fallback

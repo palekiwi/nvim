@@ -52,7 +52,7 @@ end
 return function()
   set_master_branch_name()
   set_git_base()
-  set_pr_number("GH_PR_NUMBER")
+  set_pr_number("GH_PR_NUMBER") -- TODO: Update this
 
   create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = { "*/files/*.yml", "*/k8s/*.yml" },

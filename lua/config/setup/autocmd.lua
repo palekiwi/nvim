@@ -16,6 +16,19 @@ local function set_master_branch_name()
   })
 end
 
+--- Sets opencode port on startup 
+local function set_opencode_port()
+  create_autocmd("VimEnter", {
+    callback = function()
+      local handle = io.popen("generate_port_from_path")
+      if handle then
+        vim.g.opencode_port = handle:read("*a"):gsub("%s+", "")  --[[@as string]]
+        handle:close()
+      end
+    end,
+  })
+end
+
 --- Sets git base name on startup 
 local function set_git_base()
   create_autocmd("VimEnter", { -- TODO: consider other events to update the value when the branch changes
@@ -34,15 +47,13 @@ local function set_git_base()
 end
 
 --- Sets PR number on startup 
---- @param name string name of an environmental variable that holds the branch name
-local function set_pr_number(name)
+local function set_pr_number()
   create_autocmd("VimEnter", {
     callback = function()
-      local pr_number = os.getenv(name)
-      if not pr_number then
-        return
-      else
-        vim.g.gh_pr_number = pr_number
+      local handle = io.popen("get_pr_number")
+      if handle then
+        vim.g.gh_pr_number = handle:read("*a"):gsub("%s+", "")  --[[@as string]]
+        handle:close()
       end
     end,
   })
@@ -50,9 +61,10 @@ end
 
 
 return function()
+  set_opencode_port()
   set_master_branch_name()
   set_git_base()
-  set_pr_number("GH_PR_NUMBER") -- TODO: Update this
+  set_pr_number()
 
   create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = { "*/files/*.yml", "*/k8s/*.yml" },

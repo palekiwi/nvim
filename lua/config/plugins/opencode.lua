@@ -4,11 +4,12 @@ return {
     dependencies = {
       { 'folke/snacks.nvim', opts = { input = { enabled = true } } },
     },
-    ---@type opencode.Opts
-    opts = {
-      -- load port from an env var set on a project basis or use a custom default
-      port = os.getenv("OPENCODE_PORT") and tonumber(os.getenv("OPENCODE_PORT")) or 49000,
-    },
+    config = function()
+      require('opencode').setup({
+        -- load port from an var set on a project basis or use a custom default
+        port = tonumber(vim.g.opencode_port) or 49000,
+      })
+    end,
     keys = {
       -- Recommended keymaps
       { '<S-C-d>',    function() require('opencode').command('messages_half_page_down') end, desc = 'Scroll messages down', },

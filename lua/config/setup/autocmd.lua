@@ -5,9 +5,12 @@ local function set_master_branch_name()
   create_autocmd("VimEnter", {
     callback = function()
       local handle = io.popen("get_master_branch_name")
-      local master_branch = "master" -- fallback
+      local master_branch = "master"
       if handle then
-        master_branch = handle:read("*a"):gsub("%s+", "")  --[[@as string]]
+        local result = handle:read("*a"):gsub("%s+", "")  --[[@as string]]
+        if result ~= "" then
+          master_branch = result
+        end
         handle:close()
       end
 
@@ -36,7 +39,10 @@ local function set_git_base()
       local handle = io.popen("get_pr_base")
       local base_branch = vim.g.git_master or "master" -- fallback
       if handle then
-        base_branch = handle:read("*a"):gsub("%s+", "")  --[[@as string]]
+        local result = handle:read("*a"):gsub("%s+", "")  --[[@as string]]
+        if result ~= "" then
+          base_branch = result
+        end
         handle:close()
       end
 

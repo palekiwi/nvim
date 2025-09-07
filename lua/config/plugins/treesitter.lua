@@ -30,6 +30,8 @@ return {
           "go",
           "ruby",
           "vue",
+          "nu",
+          "nix",
         },
 
         --- Install parsers synchronously (only applied to `ensure_installed`)

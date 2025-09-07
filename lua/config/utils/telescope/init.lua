@@ -265,7 +265,7 @@ end
 -- list "PR commits", i.e. commits that are present on current branch
 -- but absent on the base branch
 M.git_pr_commits = function(opts)
-  local base_branch = os.getenv("GIT_BASE") or "master"
+  local base_branch = vim.g.git_base
   local command = "git log --pretty=format:'%h %ai %<(20)%an %s' " .. "HEAD ^" .. base_branch
 
   local handle = assert(io.popen(command))

@@ -5,10 +5,10 @@ return {
       { 'folke/snacks.nvim', opts = { input = { enabled = true } } },
     },
     config = function()
-      require('opencode').setup({
+       vim.g.opencode_opts = {
         -- load port from an var set on a project basis or use a custom default
         port = tonumber(vim.g.opencode_port) or 49000,
-      })
+      }
     end,
     keys = {
       -- Recommended keymaps

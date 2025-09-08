@@ -316,8 +316,29 @@ M.git_pr_commits = function(opts)
       end)
 
       map('i', '<C-y>', function()
-        local hash = action_state.get_selected_entry().value ---@type string
-        gh_utils.copy_commit_url(hash)
+        local picker = action_state.get_current_picker(prompt_bufnr)
+        local selection = picker:get_multi_selection() ---@type table?
+
+        if selection == nil or vim.tbl_isempty(selection) then
+          -- Single selection - do what we already do
+          local hash = action_state.get_selected_entry().value ---@type string
+          gh_utils.copy_commit_url(hash)
+        else
+          local size = #selection
+          if size == 2 then
+            -- Two entries selected - save commit compare URL to registry
+            local first_hash = selection[1].value ---@type string
+            local second_hash = selection[2].value ---@type string
+            gh_utils.copy_commit_compare_url(first_hash, second_hash)
+          elseif size == 1 then
+            -- One entry selected via multiselect
+            local hash = selection[1].value ---@type string
+            gh_utils.copy_commit_url(hash)
+          else
+            vim.notify("Select exactly 1 or 2 commits for URL generation")
+            return
+          end
+        end
 
         actions.close(prompt_bufnr)
       end)

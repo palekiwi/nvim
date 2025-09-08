@@ -113,7 +113,7 @@ M.copy_blame_hash_short = function()
   local file_name = get_file_name()
 
   local line_number = vim.api.nvim_win_get_cursor(0)[1]
-  local hash = get_hash_from_blame(file_name, line_number):sub(1,7)
+  local hash = get_hash_from_blame(file_name, line_number):sub(1, 7)
 
   vim.fn.setreg("+", hash)
 
@@ -137,6 +137,18 @@ M.copy_files_changed_url = function()
   vim.fn.setreg("+", url)
 
   vim.notify("Copied files changed URL to clipboard.")
+end
+
+---@param first_hash string
+---@param second_hash string
+M.copy_commit_compare_url = function(first_hash, second_hash)
+  local repo = get_repo()
+
+  local url = "https://github.com/" .. repo .. "/compare/" .. first_hash .. "..." .. second_hash
+
+  vim.fn.setreg("+", url)
+
+  vim.notify("Copied commit compare URL to clipboard.")
 end
 
 return M

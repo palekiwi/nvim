@@ -35,6 +35,16 @@ M.diffview_this = function(vertical)
   vim.cmd("DiffviewOpen " .. base)
 end
 
+---@param range boolean
+M.diffview_file_history = function(range)
+  if range then
+    local base = vim.g.git_base or "master"
+    vim.cmd("DiffviewFileHistory % --range=" .. base .. "..HEAD")
+  else
+    vim.cmd("DiffviewFileHistory %")
+  end
+end
+
 M.prev_hunk = function()
   gs.nav_hunk("prev", { preview = false, wrap = true })
 end

@@ -22,6 +22,8 @@ return {
         },
         sections = {
           lualine_a = { get_git_base },
+          lualine_b = {'branch', 'diff', 'diagnostics'},
+          lualine_c = {'grapple', 'filename'},
         },
       }
     end,

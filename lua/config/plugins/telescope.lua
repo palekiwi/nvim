@@ -37,7 +37,7 @@ return {
               mirror = true,
               prompt_position = "top",
               preview_cutoff = 0,
-              preview_height = 0.6,
+              preview_height = 0.75,
               width = 0.8
             }
           }

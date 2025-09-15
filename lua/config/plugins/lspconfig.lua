@@ -3,7 +3,7 @@ local lsp_flags = {
 }
 
 local on_attach = function(_, bufnr)
-  vim.keymap.set("n", "<C-h>", vim.lsp.buf.signature_help, { buffer = bufnr })
+  -- vim.keymap.set("n", "<C-h>", vim.lsp.buf.signature_help, { buffer = bufnr })
   vim.keymap.set("n", "<C-space>", vim.lsp.buf.hover, { buffer = bufnr })
   vim.keymap.set("n", "<leader>ff", function() vim.lsp.buf.format { async = true } end,
     { buffer = bufnr, desc = "[LSP] format" })
@@ -93,43 +93,83 @@ return {
 
       lspconfig['ocamllsp'].setup {}
 
-      local lsp_server = ruby_lsp_server()
+      -- local lsp_server = ruby_lsp_server()
+      --
+      -- if lsp_server == "sorbet" then
+      --   lspconfig["sorbet"].setup {
+      --     on_attach = on_attach,
+      --     capabilities = capabilities,
+      --     flags = lsp_flags,
+      --   }
+      -- elseif lsp_server == "solargraph" then
+      --   lspconfig["solargraph"].setup {
+      --     --- settings = {
+      --     ---   useBundler = false
+      --     --- },
+      --     on_attach = on_attach,
+      --     capabilities = capabilities,
+      --     flags = lsp_flags,
+      --   }
+      -- elseif lsp_server == "ruby-lsp" then
+      --   -- lspconfig["ruby_lsp"].setup {
+      --   --   cmd = { "ruby-lsp" },
+      --   --   on_attach = on_attach,
+      --   --   capabilities = capabilities,
+      --   --   flags = lsp_flags,
+      --   -- }
+      --   local cmd = os.getenv("RUBY_LSP_CMD")
+      --   print(cmd)
+      --   if cmd then
+      --     lspconfig["ruby_lsp"].setup {
+      --       offset_encoding = "utf-8",
+      --       cmd = vim.split(cmd, " "),
+      --       on_attach = on_attach,
+      --       capabilities = capabilities,
+      --       flags = lsp_flags,
+      --     }
+      --   end
+      -- end
 
-      if lsp_server == "sorbet" then
-        lspconfig["sorbet"].setup {
-          on_attach = on_attach,
-          capabilities = capabilities,
-          flags = lsp_flags,
-        }
-      elseif lsp_server == "solargraph" then
-        lspconfig["solargraph"].setup {
-          --- settings = {
-          ---   useBundler = false
-          --- },
-          on_attach = on_attach,
-          capabilities = capabilities,
-          flags = lsp_flags,
-        }
-      elseif lsp_server == "ruby-lsp" then
-        -- lspconfig["ruby_lsp"].setup {
-        --   cmd = { "ruby-lsp" },
-        --   on_attach = on_attach,
-        --   capabilities = capabilities,
-        --   flags = lsp_flags,
-        -- }
-        local cmd = os.getenv("RUBY_LSP_CMD")
-        print(cmd)
-        if cmd then
-          lspconfig["ruby_lsp"].setup {
-            cmd = vim.split(cmd, " "),
-            on_attach = on_attach,
-            capabilities = capabilities,
-            flags = lsp_flags,
+      lspconfig["ruby_lsp"].setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        flags = lsp_flags,
+      }
+
+      lspconfig["stimulus_ls"].setup {
+        offset_encoding = "utf-8",
+      }
+
+      --[[
+      lspconfig["tailwindcss"].setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        flags = lsp_flags,
+        settings = {
+          {
+            tailwindCSS = {
+              experimental = {
+                configFile = "app/assets/tailwind/application.css"
+              },
+              classAttributes = { "class" },
+              includeLanguages = {
+                eruby = "erb",
+              },
+              lint = {
+                cssConflict = "warning",
+                invalidApply = "error",
+                invalidConfigPath = "error",
+                invalidScreen = "error",
+                invalidTailwindDirective = "error",
+                invalidVariant = "error",
+                recommendedVariantOrder = "warning"
+              },
+              validate = true
+            }
           }
-        end
-      end
-
-      lspconfig["stimulus_ls"].setup {}
+        },
+      }
+      --]]
 
       lspconfig["ts_ls"].setup {
         on_attach = on_attach,

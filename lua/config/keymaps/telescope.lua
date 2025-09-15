@@ -8,5 +8,6 @@ local function find_in_config()
 end
 
 return {
-  { "<space>ed", find_in_config, desc = "[Telescope] Find in config" },
+  -- TODO: find a better group for this
+  -- { "<space>ed", find_in_config, desc = "[Telescope] Find in config" },
 }

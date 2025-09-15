@@ -40,6 +40,7 @@ set("n", "<leader>gy", grep_string_sass, { desc = "[Grep String] Sass" })
 set("n", "<space>gs", live_grep_specs, { desc = "[Live Grep] Specs" })
 set("n", "<C-s>", rails_utils.alternate, { desc = "[Rails] Find Spec" })
 set("n", "<leader>dd", rails_utils.show_diagnostics, { desc = "[Diagnostic] RSpec" })
+set("n", "<leader>lr", "<cmd>LspRestart ruby_lsp stimulus_ls<cr>", { desc = "[LSP] Restart" })
 
 --- set("n", "<leader>rp", function() rails_utils.run_tests({ scope = "pr" }) end, { desc = "[RSpec] Test PR" })
 --- set("n", "<leader>rt", function() rails_utils.run_tests({ scope = "file" }) end, { desc = "[RSpec] Test file" })

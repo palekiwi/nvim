@@ -21,7 +21,7 @@ local function set_pr_number(name)
       if not pr_number then
         return
       else
-        vim.g.pr_number = pr_number
+        vim.g.gh_pr_number = pr_number
       end
     end,
   })
@@ -30,7 +30,7 @@ end
 
 return function()
   set_git_base("GIT_BASE")
-  set_pr_number("PR_NUMBER")
+  set_pr_number("GH_PR_NUMBER")
 
   create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = { "*/files/*.yml", "*/k8s/*.yml" },

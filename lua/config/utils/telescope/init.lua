@@ -351,6 +351,30 @@ M.git_pr_commits = function(opts)
         git_utils.set_base_branch(git_base)
       end)
 
+      map('i', '<C-q>', function()
+        local hash = action_state.get_selected_entry().value ---@type string
+        
+        actions.close(prompt_bufnr)
+        
+        local files = vim.fn.systemlist("git diff-tree --no-commit-id --name-only -r " .. hash)
+        
+        if vim.v.shell_error ~= 0 or #files == 0 then
+          vim.notify("No files found for commit " .. hash, vim.log.levels.WARN)
+          return
+        end
+        
+        local qf_list = {}
+        for _, file in ipairs(files) do
+          table.insert(qf_list, {
+            filename = file,
+            text = "Modified in commit " .. hash
+          })
+        end
+        
+        vim.fn.setqflist({}, 'r', { title = 'Files modified in commit ' .. hash, items = qf_list })
+        vim.cmd('copen')
+      end)
+
       return true
     end
   }

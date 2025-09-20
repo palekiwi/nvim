@@ -89,6 +89,7 @@ local base = {
   { "tn",              git_utils.diffview_this,                                                desc = "Diff this: horizontal" },
   { "tq",              git_utils.hunks_to_loclist,                                             desc = "Hunks to Loclist" },
   { "tq",              helpers.toggle_quickfix,                                                desc = "Toggle quickfix" },
+  { "tr",              nvim_utils.toggle_relativenumber,                                       desc = "Toggle relativenumber" },
   { "tw",              nvim_utils.toggle_wrap,                                                 desc = "Toggle Wrap" },
   -- leader
   { "<leader><space>", helpers.open_on_line,                                                   desc = "Open file on line" },

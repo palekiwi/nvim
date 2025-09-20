@@ -22,6 +22,7 @@ set.smartcase = true
 set.splitbelow = true
 set.splitright = true
 set.wrap = false
+set.linebreak = true
 set.scrolloff = 5
 set.fileencoding = 'utf-8'
 

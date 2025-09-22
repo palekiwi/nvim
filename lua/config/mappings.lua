@@ -91,6 +91,7 @@ local base = {
   { "tq",              helpers.toggle_quickfix,                                                desc = "Toggle quickfix" },
   { "tr",              nvim_utils.toggle_relativenumber,                                       desc = "Toggle relativenumber" },
   { "tw",              nvim_utils.toggle_wrap,                                                 desc = "Toggle Wrap" },
+  { "ty",              function() git_utils.set_base_branch(vim.fn.getreg("+")) end,           desc = "Change base: master" },
   -- leader
   { "<leader><space>", helpers.open_on_line,                                                   desc = "Open file on line" },
   { "<leader>N",       function() git_utils.toggle_git_tree("show") end,                       desc = "Tree: Git status" },

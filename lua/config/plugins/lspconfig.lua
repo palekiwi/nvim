@@ -10,49 +10,32 @@ local on_attach = function(_, bufnr)
   vim.keymap.set("n", "<leader>dr", vim.lsp.buf.rename, { buffer = bufnr, desc = "[LSP] rename" })
 end
 
-local function ruby_lsp_server()
-  return os.getenv("RUBY_LSP")
-end
-
 return {
   {
     "neovim/nvim-lspconfig",
     config = function()
       --- Add additional capabilities supported by nvim-cmp
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      local lspconfig = require('lspconfig')
 
-      lspconfig["ansiblels"].setup {
+      vim.lsp.config.clangd = {
         on_attach = on_attach,
         capabilities = capabilities,
         flags = lsp_flags,
       }
 
-      lspconfig["astro"].setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        flags = lsp_flags,
-      }
-
-      lspconfig["clangd"].setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        flags = lsp_flags,
-      }
-
-      lspconfig["cssls"].setup {
+      vim.lsp.config.cssls = {
         capabilities = require('cmp_nvim_lsp').default_capabilities(
           vim.lsp.protocol.make_client_capabilities()
         )
       }
 
-      lspconfig["elmls"].setup {
+      vim.lsp.config.elmls = {
         on_attach = on_attach,
         capabilities = capabilities,
         flags = lsp_flags,
       }
 
-      lspconfig["eslint"].setup {
+      vim.lsp.config.eslint = {
         on_attach = function(_, bufnr)
           vim.api.nvim_create_autocmd("BufWritePre", {
             buffer = bufnr,
@@ -63,19 +46,19 @@ return {
         flags = lsp_flags,
       }
 
-      lspconfig["gopls"].setup {
+      vim.lsp.config.gopls = {
         on_attach = on_attach,
         capabilities = capabilities,
         flags = lsp_flags,
       }
 
-      lspconfig["lua_ls"].setup {
+      vim.lsp.config.lua_ls = {
         on_attach = on_attach,
         capabilities = capabilities,
         flags = lsp_flags,
       }
 
-      lspconfig["nixd"].setup {
+      vim.lsp.config.nixd = {
         on_attach = on_attach,
         capabilities = capabilities,
         flags = lsp_flags,
@@ -91,101 +74,34 @@ return {
         }
       }
 
-      lspconfig['ocamllsp'].setup {}
-
-      -- local lsp_server = ruby_lsp_server()
-      --
-      -- if lsp_server == "sorbet" then
-      --   lspconfig["sorbet"].setup {
-      --     on_attach = on_attach,
-      --     capabilities = capabilities,
-      --     flags = lsp_flags,
-      --   }
-      -- elseif lsp_server == "solargraph" then
-      --   lspconfig["solargraph"].setup {
-      --     --- settings = {
-      --     ---   useBundler = false
-      --     --- },
-      --     on_attach = on_attach,
-      --     capabilities = capabilities,
-      --     flags = lsp_flags,
-      --   }
-      -- elseif lsp_server == "ruby-lsp" then
-      --   -- lspconfig["ruby_lsp"].setup {
-      --   --   cmd = { "ruby-lsp" },
-      --   --   on_attach = on_attach,
-      --   --   capabilities = capabilities,
-      --   --   flags = lsp_flags,
-      --   -- }
-      --   local cmd = os.getenv("RUBY_LSP_CMD")
-      --   print(cmd)
-      --   if cmd then
-      --     lspconfig["ruby_lsp"].setup {
-      --       offset_encoding = "utf-8",
-      --       cmd = vim.split(cmd, " "),
-      --       on_attach = on_attach,
-      --       capabilities = capabilities,
-      --       flags = lsp_flags,
-      --     }
-      --   end
-      -- end
-
-      lspconfig["ruby_lsp"].setup {
+      vim.lsp.config.ruby_lsp = {
         on_attach = on_attach,
         capabilities = capabilities,
         flags = lsp_flags,
       }
 
-      lspconfig["stimulus_ls"].setup {
+      vim.lsp.config.stimulus_ls = {
         offset_encoding = "utf-8",
       }
 
-      --[[
-      lspconfig["tailwindcss"].setup {
+      vim.lsp.config.ts_ls = {
         on_attach = on_attach,
         capabilities = capabilities,
         flags = lsp_flags,
-        settings = {
-          {
-            tailwindCSS = {
-              experimental = {
-                configFile = "app/assets/tailwind/application.css"
-              },
-              classAttributes = { "class" },
-              includeLanguages = {
-                eruby = "erb",
-              },
-              lint = {
-                cssConflict = "warning",
-                invalidApply = "error",
-                invalidConfigPath = "error",
-                invalidScreen = "error",
-                invalidTailwindDirective = "error",
-                invalidVariant = "error",
-                recommendedVariantOrder = "warning"
-              },
-              validate = true
-            }
-          }
-        },
       }
-      --]]
 
-      lspconfig["ts_ls"].setup {
+      vim.lsp.config.yamlls = {
         on_attach = on_attach,
         capabilities = capabilities,
         flags = lsp_flags,
       }
-      lspconfig["volar"].setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        flags = lsp_flags,
-      }
-      lspconfig["yamlls"].setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        flags = lsp_flags,
-      }
+
+      vim.lsp.enable('eslint')
+      vim.lsp.enable('lua_ls')
+      vim.lsp.enable('nixd')
+      vim.lsp.enable('ruby_lsp')
+      vim.lsp.enable('stimulus_ls')
+      vim.lsp.enable('ts_ls')
     end,
   }
 }
